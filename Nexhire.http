@@ -1,0 +1,6 @@
+@Nexhire_HostAddress = http://localhost:5188
+
+GET {{Nexhire_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
