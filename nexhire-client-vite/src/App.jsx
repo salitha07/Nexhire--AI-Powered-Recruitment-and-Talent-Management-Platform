@@ -10,16 +10,16 @@ import AuthProvider from './context/AuthContext';
 // Public Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Unauthorized from './pages/Unauthorized';  // ← This should work now
 
+// Components
 import ProtectedRoute from './components/ProtectedRoute';
 
-// Placeholder Dashboard Components
+// Dashboard Components (defined here for now)
 const CandidateDashboard = () => (
   <div className="min-h-screen bg-gray-50 p-8">
     <div className="max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold text-[#1a3c5e]">Candidate Dashboard</h1>
-      <p className="text-gray-600 mt-2">Welcome to your candidate dashboard. This page will be replaced with the actual implementation.</p>
+      <p className="text-gray-600 mt-2">Welcome to your candidate dashboard.</p>
     </div>
   </div>
 );
@@ -28,7 +28,7 @@ const RecruiterDashboard = () => (
   <div className="min-h-screen bg-gray-50 p-8">
     <div className="max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold text-[#1a3c5e]">Recruiter Dashboard</h1>
-      <p className="text-gray-600 mt-2">Welcome to your recruiter dashboard. This page will be replaced with the actual implementation.</p>
+      <p className="text-gray-600 mt-2">Welcome to your recruiter dashboard.</p>
     </div>
   </div>
 );
@@ -37,7 +37,7 @@ const HiringDashboard = () => (
   <div className="min-h-screen bg-gray-50 p-8">
     <div className="max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold text-[#1a3c5e]">Hiring Manager Dashboard</h1>
-      <p className="text-gray-600 mt-2">Welcome to your hiring manager dashboard. This page will be replaced with the actual implementation.</p>
+      <p className="text-gray-600 mt-2">Welcome to your hiring manager dashboard.</p>
     </div>
   </div>
 );
@@ -46,7 +46,7 @@ const AdminDashboard = () => (
   <div className="min-h-screen bg-gray-50 p-8">
     <div className="max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold text-[#1a3c5e]">Admin Dashboard</h1>
-      <p className="text-gray-600 mt-2">Welcome to the admin dashboard. This page will be replaced with the actual implementation.</p>
+      <p className="text-gray-600 mt-2">Welcome to the admin dashboard.</p>
     </div>
   </div>
 );
@@ -71,9 +71,6 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/unauthorized" element={<Unauthorized />} />
-          
-          {/* Redirect root to login */}
           <Route path="/" element={<Navigate to="/login" replace />} />
 
           {/* Protected Routes */}

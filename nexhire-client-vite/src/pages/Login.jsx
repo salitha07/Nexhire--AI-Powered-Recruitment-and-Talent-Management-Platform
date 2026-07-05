@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../services/api';
-import { useAuth } from '../Context/AuthContext.jsx';
+import { useAuth } from '../context/AuthContext'; 
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuth();  // ← This should work now
   const [formData, setFormData] = useState({
     email: '',
     password: '',

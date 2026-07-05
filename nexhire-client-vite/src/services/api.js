@@ -1,15 +1,15 @@
-// src/services/api.js
+
 import axios from 'axios';
 
-// Create axios instance with base URL pointing to the backend
+
 const api = axios.create({
-  baseURL: 'https://localhost:7001',
+  baseURL: 'http://localhost:5000', 
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor to attach JWT token
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -37,5 +37,5 @@ api.interceptors.response.use(
   }
 );
 
-// Export the api instance as default
+
 export default api;

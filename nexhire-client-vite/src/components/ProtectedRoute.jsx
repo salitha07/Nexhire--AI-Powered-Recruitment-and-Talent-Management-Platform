@@ -3,31 +3,6 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-/**
- * ProtectedRoute component that guards routes based on authentication and role
- * 
- * @param {Object} props
- * @param {React.ReactNode} props.children - The component to render if authorized
- * @param {string[]} props.allowedRoles - Array of allowed roles (e.g., ['candidate', 'admin'])
- * 
- * @example
- * // Single role
- * <ProtectedRoute allowedRoles={['candidate']}>
- *   <CandidateDashboard />
- * </ProtectedRoute>
- * 
- * @example
- * // Multiple roles
- * <ProtectedRoute allowedRoles={['recruiter', 'hiring_manager']}>
- *   <RecruiterDashboard />
- * </ProtectedRoute>
- * 
- * @example
- * // No role restriction (just requires authentication)
- * <ProtectedRoute>
- *   <UserProfile />
- * </ProtectedRoute>
- */
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const { user, isLoading, isAuthenticated } = useAuth();
 
@@ -49,13 +24,27 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   }
 
   // If allowedRoles is provided and user's role is not in the list
+  // Redirect to login or home instead of unauthorized
   if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
+    // Option 1: Redirect to login
+    return <Navigate to="/login" replace />;
+    
+    // Option 2: Redirect to home page
+    // return <Navigate to="/" replace />;
+    
+    // Option 3: Show an error message
+    // return (
+    //   <div className="min-h-screen flex justify-center items-center">
+    //     <div className="text-center">
+    //       <h1 className="text-2xl font-bold text-red-600">Access Denied</h1>
+    //       <p className="text-gray-600 mt-2">You don't have permission to view this page.</p>
+    //     </div>
+    //   </div>
+    // );
   }
 
   // If all checks pass, render the children
   return children;
 };
 
-// Make sure we export default
 export default ProtectedRoute;
