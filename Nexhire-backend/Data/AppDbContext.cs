@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Nexhire.Models;
 
 namespace Nexhire.Data
@@ -11,6 +11,7 @@ namespace Nexhire.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Job> Jobs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
