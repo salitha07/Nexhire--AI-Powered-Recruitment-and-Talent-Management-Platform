@@ -1,120 +1,89 @@
-// src/App.jsx
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-// Context Providers
-import AuthProvider from './context/AuthContext';
-
-// Public Pages
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Unauthorized from './pages/Unauthorized';
 
-// Components
-import ProtectedRoute from './components/ProtectedRoute';
-
-// Dashboard Components (defined here for now)
+// ─── Placeholder dashboards (other members replace these) ───────────────────
 const CandidateDashboard = () => (
-  <div className="min-h-screen bg-gray-50 p-8">
-    <div className="max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#1a3c5e]">Candidate Dashboard</h1>
-      <p className="text-gray-600 mt-2">Welcome to your candidate dashboard.</p>
-    </div>
+  <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <h1 className="text-3xl font-bold text-blue-900">Candidate Dashboard</h1>
   </div>
 );
 
 const RecruiterDashboard = () => (
-  <div className="min-h-screen bg-gray-50 p-8">
-    <div className="max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#1a3c5e]">Recruiter Dashboard</h1>
-      <p className="text-gray-600 mt-2">Welcome to your recruiter dashboard.</p>
-    </div>
+  <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <h1 className="text-3xl font-bold text-blue-900">Recruiter Dashboard</h1>
   </div>
 );
 
 const HiringDashboard = () => (
-  <div className="min-h-screen bg-gray-50 p-8">
-    <div className="max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#1a3c5e]">Hiring Manager Dashboard</h1>
-      <p className="text-gray-600 mt-2">Welcome to your hiring manager dashboard.</p>
-    </div>
+  <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <h1 className="text-3xl font-bold text-blue-900">Hiring Manager Dashboard</h1>
   </div>
 );
 
 const AdminDashboard = () => (
-  <div className="min-h-screen bg-gray-50 p-8">
-    <div className="max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#1a3c5e]">Admin Dashboard</h1>
-      <p className="text-gray-600 mt-2">Welcome to the admin dashboard.</p>
-    </div>
+  <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <h1 className="text-3xl font-bold text-blue-900">Admin Dashboard</h1>
   </div>
 );
+// ────────────────────────────────────────────────────────────────────────────
+
+function AppRoutes() {
+  return (
+    <Routes>
+      {/* Public routes */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+
+      {/* Protected routes */}
+      <Route
+        path="/candidate/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['candidate']}>
+            <CandidateDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/recruiter/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['recruiter']}>
+            <RecruiterDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hiring/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['hiring_manager']}>
+            <HiringDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
+}
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProvider>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Navigate to="/login" replace />} />
-
-          {/* Protected Routes */}
-          <Route
-            path="/candidate/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['candidate']}>
-                <CandidateDashboard />
-              </ProtectedRoute>
-            }
-          />
-          
-          <Route
-            path="/recruiter/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['recruiter']}>
-                <RecruiterDashboard />
-              </ProtectedRoute>
-            }
-          />
-          
-          <Route
-            path="/hiring/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['hiring_manager']}>
-                <HiringDashboard />
-              </ProtectedRoute>
-            }
-          />
-          
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Catch all - redirect to login */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
+        <AppRoutes />
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 
