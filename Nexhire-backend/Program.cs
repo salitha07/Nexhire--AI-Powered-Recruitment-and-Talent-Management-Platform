@@ -50,6 +50,7 @@ builder.Services.AddCors(options =>
 
 // Dependency Injection
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<JobsService>();
 
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
