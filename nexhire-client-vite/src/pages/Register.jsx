@@ -1,10 +1,136 @@
-// src/pages/Register.jsx
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import api from '../services/api';
 
-const Register = () => {
+const styles = {
+  page: {
+    minHeight: '100vh',
+    background: '#f0f4f8',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '20px',
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  },
+  card: {
+    background: '#ffffff',
+    borderRadius: '12px',
+    boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+    width: '100%',
+    maxWidth: '420px',
+    padding: '48px 40px',
+  },
+  header: {
+    textAlign: 'center',
+    marginBottom: '32px',
+  },
+  logoRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+    marginBottom: '6px',
+  },
+  logoIcon: {
+    width: '36px',
+    height: '36px',
+    background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
+    borderRadius: '8px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoText: {
+    fontSize: '22px',
+    fontWeight: '700',
+    color: '#1e3a5f',
+    letterSpacing: '-0.5px',
+  },
+  subtitle: {
+    fontSize: '13px',
+    color: '#64748b',
+    marginTop: '2px',
+  },
+  title: {
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#1e293b',
+    marginBottom: '24px',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  formGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px',
+  },
+  label: {
+    fontSize: '13px',
+    fontWeight: '500',
+    color: '#374151',
+  },
+  input: {
+    padding: '11px 14px',
+    border: '1.5px solid #e2e8f0',
+    borderRadius: '8px',
+    fontSize: '14px',
+    color: '#1e293b',
+    background: '#f8fafc',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+  },
+  select: {
+    padding: '11px 14px',
+    border: '1.5px solid #e2e8f0',
+    borderRadius: '8px',
+    fontSize: '14px',
+    color: '#1e293b',
+    background: '#f8fafc',
+    outline: 'none',
+    cursor: 'pointer',
+    appearance: 'none',
+  },
+  errorText: {
+    fontSize: '11px',
+    color: '#ef4444',
+    marginTop: '2px',
+  },
+  submitBtn: {
+    width: '100%',
+    padding: '12px',
+    background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    letterSpacing: '0.3px',
+    marginTop: '4px',
+  },
+  submitBtnDisabled: {
+    opacity: '0.6',
+    cursor: 'not-allowed',
+  },
+  footer: {
+    textAlign: 'center',
+    marginTop: '24px',
+    fontSize: '13px',
+    color: '#64748b',
+  },
+  footerLink: {
+    color: '#1e40af',
+    fontWeight: '600',
+    textDecoration: 'none',
+  },
+};
+
+function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
@@ -15,259 +141,207 @@ const Register = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [focusedInput, setFocusedInput] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: '',
-      }));
-    }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: '' });
   };
 
-  const validateForm = () => {
+  const validate = () => {
     const newErrors = {};
-
-    if (!formData.fullName.trim()) {
+    if (!formData.fullName.trim())
       newErrors.fullName = 'Full name is required';
-    } else if (formData.fullName.trim().length < 2) {
-      newErrors.fullName = 'Full name must be at least 2 characters';
-    }
-
-    if (!formData.email.trim()) {
+    if (!formData.email.trim())
       newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-
-    if (!formData.password) {
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = 'Invalid email format';
+    if (!formData.password)
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
+    else if (formData.password.length < 6)
+      newErrors.password = 'Minimum 6 characters';
+    if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    if (!formData.role) {
-      newErrors.role = 'Please select a role';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
-
     setIsLoading(true);
-
     try {
-      const registrationData = {
-        fullName: formData.fullName.trim(),
-        email: formData.email.trim(),
+      await api.post('/api/auth/register', {
+        fullName: formData.fullName,
+        email: formData.email,
         password: formData.password,
         role: formData.role,
-      };
-
-      await api.post('/api/auth/register', registrationData);
-
-      toast.success('Registration successful! Please login to continue.');
-
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-    } catch (error) {
-      console.error('Registration error:', error);
-
-      let errorMessage = 'An error occurred during registration. Please try again.';
-
-      if (error.response) {
-        if (error.response.status === 400) {
-          errorMessage = error.response.data?.message || 'Invalid registration data. Please check your input.';
-        } else if (error.response.status === 409) {
-          errorMessage = 'An account with this email already exists. Please login instead.';
-        } else if (error.response.status === 500) {
-          errorMessage = 'Server error. Please try again later.';
-        } else if (error.response.data?.message) {
-          errorMessage = error.response.data.message;
-        }
-      } else if (error.request) {
-        errorMessage = 'Unable to connect to the server. Please check your network connection.';
-      }
-
-      toast.error(errorMessage);
+      });
+      toast.success('Account created! Please sign in.');
+      setTimeout(() => navigate('/login'), 1500);
+    } catch (err) {
+      const message = err.response?.data?.message || 'Registration failed. Try again.';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const getInputStyle = (name) => ({
+    ...styles.input,
+    borderColor: errors[name] ? '#ef4444' : focusedInput === name ? '#3b82f6' : '#e2e8f0',
+    background: focusedInput === name ? '#ffffff' : '#f8fafc',
+    boxShadow: focusedInput === name ? '0 0 0 3px rgba(59,130,246,0.1)' : 'none',
+  });
+
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-[#1a3c5e] to-[#2a5f8a] p-5 font-sans">
-      <div className="bg-white rounded-2xl px-10 py-12 w-full max-w-[440px] shadow-2xl transition-transform duration-200 hover:scale-[1.01]">
-        <div className="text-center mb-9">
-          <h1 className="text-4xl font-bold text-[#1a3c5e] mb-2 tracking-tight">
-            Nexhire
-          </h1>
-          <p className="text-base text-[#6b7a8f] leading-relaxed">
-            Create your account to get started
-          </p>
+    <div style={styles.page}>
+      <ToastContainer position="top-right" autoClose={3000} />
+
+      <div style={styles.card}>
+
+        {/* Logo */}
+        <div style={styles.header}>
+          <div style={styles.logoRow}>
+            <div style={styles.logoIcon}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="white" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <span style={styles.logoText}>Nexhire</span>
+          </div>
+          <p style={styles.subtitle}>AI-Powered Recruitment Platform</p>
         </div>
 
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="fullName" className="text-sm font-semibold text-[#1a3c5e] tracking-wide">
-              Full Name
-            </label>
+        {/* Title */}
+        <h2 style={styles.title}>Create your account</h2>
+
+        {/* Form */}
+        <form style={styles.form} onSubmit={handleSubmit}>
+
+          {/* Full Name */}
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Full Name</label>
             <input
               type="text"
-              id="fullName"
               name="fullName"
-              className={`px-4 py-3 border-2 rounded-lg text-[15px] transition-all duration-300 bg-[#f8fafc] text-[#1a3c5e] outline-none focus:border-[#1a3c5e] focus:bg-white focus:ring-4 focus:ring-[#1a3c5e]/10 ${
-                errors.fullName ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500/10' : 'border-[#e1e8ee]'
-              } ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              placeholder="Enter your full name"
               value={formData.fullName}
               onChange={handleChange}
-              disabled={isLoading}
+              onFocus={() => setFocusedInput('fullName')}
+              onBlur={() => setFocusedInput(null)}
+              placeholder="John Doe"
+              style={getInputStyle('fullName')}
             />
             {errors.fullName && (
-              <span className="text-sm text-red-500 mt-1 font-medium">{errors.fullName}</span>
+              <span style={styles.errorText}>{errors.fullName}</span>
             )}
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className="text-sm font-semibold text-[#1a3c5e] tracking-wide">
-              Email Address
-            </label>
+          {/* Email */}
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Email Address</label>
             <input
               type="email"
-              id="email"
               name="email"
-              className={`px-4 py-3 border-2 rounded-lg text-[15px] transition-all duration-300 bg-[#f8fafc] text-[#1a3c5e] outline-none focus:border-[#1a3c5e] focus:bg-white focus:ring-4 focus:ring-[#1a3c5e]/10 ${
-                errors.email ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500/10' : 'border-[#e1e8ee]'
-              } ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
-              disabled={isLoading}
+              onFocus={() => setFocusedInput('email')}
+              onBlur={() => setFocusedInput(null)}
+              placeholder="you@example.com"
+              style={getInputStyle('email')}
             />
             {errors.email && (
-              <span className="text-sm text-red-500 mt-1 font-medium">{errors.email}</span>
+              <span style={styles.errorText}>{errors.email}</span>
             )}
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="password" className="text-sm font-semibold text-[#1a3c5e] tracking-wide">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className={`px-4 py-3 border-2 rounded-lg text-[15px] transition-all duration-300 bg-[#f8fafc] text-[#1a3c5e] outline-none focus:border-[#1a3c5e] focus:bg-white focus:ring-4 focus:ring-[#1a3c5e]/10 ${
-                errors.password ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500/10' : 'border-[#e1e8ee]'
-              } ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              placeholder="Enter your password (min 6 characters)"
-              value={formData.password}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-            {errors.password && (
-              <span className="text-sm text-red-500 mt-1 font-medium">{errors.password}</span>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="confirmPassword" className="text-sm font-semibold text-[#1a3c5e] tracking-wide">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              className={`px-4 py-3 border-2 rounded-lg text-[15px] transition-all duration-300 bg-[#f8fafc] text-[#1a3c5e] outline-none focus:border-[#1a3c5e] focus:bg-white focus:ring-4 focus:ring-[#1a3c5e]/10 ${
-                errors.confirmPassword ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500/10' : 'border-[#e1e8ee]'
-              } ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-            {errors.confirmPassword && (
-              <span className="text-sm text-red-500 mt-1 font-medium">{errors.confirmPassword}</span>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="role" className="text-sm font-semibold text-[#1a3c5e] tracking-wide">
-              Role
-            </label>
+          {/* Role */}
+          <div style={styles.formGroup}>
+            <label style={styles.label}>I am a...</label>
             <select
-              id="role"
               name="role"
-              className={`px-4 py-3 border-2 rounded-lg text-[15px] transition-all duration-300 bg-[#f8fafc] text-[#1a3c5e] outline-none focus:border-[#1a3c5e] focus:bg-white focus:ring-4 focus:ring-[#1a3c5e]/10 ${
-                errors.role ? 'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500/10' : 'border-[#e1e8ee]'
-              } ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
               value={formData.role}
               onChange={handleChange}
-              disabled={isLoading}
+              style={{
+                ...styles.select,
+                borderColor: focusedInput === 'role' ? '#3b82f6' : '#e2e8f0',
+                boxShadow: focusedInput === 'role' ? '0 0 0 3px rgba(59,130,246,0.1)' : 'none',
+              }}
+              onFocus={() => setFocusedInput('role')}
+              onBlur={() => setFocusedInput(null)}
             >
-              <option value="candidate">Candidate</option>
+              <option value="candidate">Job Seeker (Candidate)</option>
               <option value="recruiter">Recruiter</option>
             </select>
-            <p className="text-xs text-[#6b7a8f] mt-1">
-              Hiring Manager and Admin roles are assigned by administrators only.
-            </p>
-            {errors.role && (
-              <span className="text-sm text-red-500 mt-1 font-medium">{errors.role}</span>
+          </div>
+
+          {/* Password */}
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              onFocus={() => setFocusedInput('password')}
+              onBlur={() => setFocusedInput(null)}
+              placeholder="Min. 6 characters"
+              style={getInputStyle('password')}
+            />
+            {errors.password && (
+              <span style={styles.errorText}>{errors.password}</span>
             )}
           </div>
 
+          {/* Confirm Password */}
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              onFocus={() => setFocusedInput('confirmPassword')}
+              onBlur={() => setFocusedInput(null)}
+              placeholder="Re-enter your password"
+              style={getInputStyle('confirmPassword')}
+            />
+            {errors.confirmPassword && (
+              <span style={styles.errorText}>{errors.confirmPassword}</span>
+            )}
+          </div>
+
+          {/* Submit */}
           <button
             type="submit"
-            className={`mt-2 py-3.5 px-6 bg-[#1a3c5e] text-white border-none rounded-lg text-base font-semibold cursor-pointer transition-all duration-300 flex justify-center items-center gap-2.5 h-13 ${
-              !isLoading 
-                ? 'hover:bg-[#2a5f8a] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(26,60,94,0.3)] active:translate-y-0' 
-                : 'opacity-70 cursor-not-allowed'
-            }`}
             disabled={isLoading}
+            style={{
+              ...styles.submitBtn,
+              ...(isLoading ? styles.submitBtnDisabled : {}),
+            }}
           >
-            {isLoading ? (
-              <>
-                <span className="inline-block w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin"></span>
-                Creating account...
-              </>
-            ) : (
-              'Create Account'
-            )}
+            {isLoading ? 'Creating account...' : 'Create Account'}
           </button>
+
         </form>
 
-        <div className="mt-7 text-center border-t border-[#e8edf2] pt-6">
-          <p className="text-[15px] text-[#6b7a8f]">
-            Already have an account?{' '}
-            <Link to="/login" className="text-[#1a3c5e] font-semibold no-underline transition-colors duration-200 hover:text-[#2a5f8a] hover:underline">
-              Login here
-            </Link>
-          </p>
+        {/* Footer */}
+        <div style={styles.footer}>
+          Already have an account?{' '}
+          <Link to="/login" style={styles.footerLink}>
+            Sign in
+          </Link>
         </div>
+
       </div>
     </div>
   );
-};
+}
 
-// Make sure we export default
 export default Register;
