@@ -4,6 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import Logo from '../components/Logo';
 
 const styles = {
   page: {
@@ -26,33 +27,15 @@ const styles = {
   header: {
     textAlign: 'center',
     marginBottom: '32px',
-  },
-  logoRow: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: '10px',
-    marginBottom: '6px',
-  },
-  logoIcon: {
-    width: '36px',
-    height: '36px',
-    background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
-    borderRadius: '8px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoText: {
-    fontSize: '22px',
-    fontWeight: '700',
-    color: '#1e3a5f',
-    letterSpacing: '-0.5px',
+    gap: '8px',
   },
   subtitle: {
     fontSize: '13px',
     color: '#64748b',
-    marginTop: '2px',
+    marginTop: '4px',
   },
   title: {
     fontSize: '18px',
@@ -109,10 +92,6 @@ const styles = {
     cursor: 'pointer',
     letterSpacing: '0.3px',
     marginTop: '4px',
-  },
-  submitBtnDisabled: {
-    opacity: '0.6',
-    cursor: 'not-allowed',
   },
   footer: {
     textAlign: 'center',
@@ -173,32 +152,16 @@ function Login() {
   return (
     <div style={styles.page}>
       <ToastContainer position="top-right" autoClose={3000} />
-
       <div style={styles.card}>
 
-        {/* Logo */}
         <div style={styles.header}>
-          <div style={styles.logoRow}>
-            <div style={styles.logoIcon}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="white" strokeWidth="2" strokeLinecap="round"
-                strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </div>
-            <span style={styles.logoText}>Nexhire</span>
-          </div>
+          <Logo size="md" />
           <p style={styles.subtitle}>AI-Powered Recruitment Platform</p>
         </div>
 
-        {/* Title */}
         <h2 style={styles.title}>Sign in to your account</h2>
 
-        {/* Form */}
         <form style={styles.form} onSubmit={handleSubmit}>
-
-          {/* Email */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Email Address</label>
             <input
@@ -214,7 +177,6 @@ function Login() {
             />
           </div>
 
-          {/* Password */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Password</label>
             <input
@@ -230,33 +192,28 @@ function Login() {
             />
           </div>
 
-          {/* Forgot password */}
           <div style={styles.forgotRow}>
             <button type="button" style={styles.forgotBtn}>
               Forgot your password?
             </button>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={isLoading}
             style={{
               ...styles.submitBtn,
-              ...(isLoading ? styles.submitBtnDisabled : {}),
+              opacity: isLoading ? 0.6 : 1,
+              cursor: isLoading ? 'not-allowed' : 'pointer',
             }}
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
-
         </form>
 
-        {/* Footer */}
         <div style={styles.footer}>
           Don't have an account?{' '}
-          <Link to="/register" style={styles.footerLink}>
-            Create one
-          </Link>
+          <Link to="/register" style={styles.footerLink}>Create one</Link>
         </div>
 
       </div>

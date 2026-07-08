@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Logo from '../components/Logo';
 
 const styles = {
   page: {
@@ -20,6 +21,11 @@ const styles = {
     padding: '48px 40px',
     textAlign: 'center',
   },
+  logoRow: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '32px',
+  },
   iconCircle: {
     width: '72px',
     height: '72px',
@@ -28,7 +34,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    margin: '0 auto 24px auto',
+    margin: '0 auto 20px auto',
   },
   title: {
     fontSize: '22px',
@@ -65,28 +71,6 @@ const styles = {
     fontWeight: '600',
     cursor: 'pointer',
   },
-  logoRow: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '10px',
-    marginBottom: '32px',
-  },
-  logoIcon: {
-    width: '32px',
-    height: '32px',
-    background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
-    borderRadius: '8px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoText: {
-    fontSize: '20px',
-    fontWeight: '700',
-    color: '#1e3a5f',
-    letterSpacing: '-0.5px',
-  },
 };
 
 function Unauthorized() {
@@ -104,45 +88,32 @@ function Unauthorized() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   return (
     <div style={styles.page}>
       <div style={styles.card}>
 
-        {/* Logo */}
         <div style={styles.logoRow}>
-          <div style={styles.logoIcon}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-              stroke="white" strokeWidth="2" strokeLinecap="round"
-              strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
-          <span style={styles.logoText}>Nexhire</span>
+          <Logo size="sm" />
         </div>
 
-        {/* Icon */}
         <div style={styles.iconCircle}>
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
-            stroke="#dc2626" strokeWidth="2" strokeLinecap="round"
-            strokeLinejoin="round">
+            stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10" />
             <line x1="15" y1="9" x2="9" y2="15" />
             <line x1="9" y1="9" x2="15" y2="15" />
           </svg>
         </div>
 
-        {/* Text */}
         <h1 style={styles.title}>Access Denied</h1>
         <p style={styles.message}>
           You don't have permission to view this page.<br />
           Please contact your administrator if you think this is a mistake.
         </p>
 
-        {/* Buttons */}
         <button style={styles.btnPrimary} onClick={goToDashboard}>
           Go to My Dashboard
         </button>
