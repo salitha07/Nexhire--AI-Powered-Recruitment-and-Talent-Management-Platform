@@ -6,18 +6,11 @@ import Register from './pages/Register';
 import Unauthorized from './pages/Unauthorized';
 import Landing from './pages/Landing';
 
-// Placeholder dashboards — other members replace these
-const CandidateDashboard = () => (
-  <div style={{ textAlign: 'center', marginTop: '100px', fontSize: '24px', color: '#1e40af' }}>
-    Candidate Dashboard
-  </div>
-);
-
-const RecruiterDashboard = () => (
-  <div style={{ textAlign: 'center', marginTop: '100px', fontSize: '24px', color: '#1e40af' }}>
-    Recruiter Dashboard
-  </div>
-);
+import JobListings from './pages/jobs/JobListings';
+import JobDetail from './pages/jobs/JobDetail';
+import CreateJob from './pages/jobs/CreateJob';
+import RecruiterDashboard from './pages/jobs/RecruiterDashboard';
+import CandidateDashboard from './pages/jobs/CandidateDashboard';
 
 const HiringDashboard = () => (
   <div style={{ textAlign: 'center', marginTop: '100px', fontSize: '24px', color: '#1e40af' }}>
@@ -36,10 +29,11 @@ function AppRoutes() {
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<Landing />} />
-    
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/jobs" element={<JobListings />} />
+      <Route path="/jobs/:id" element={<JobDetail />} />
 
       {/* Protected routes */}
       <Route path="/candidate/dashboard" element={
@@ -50,6 +44,11 @@ function AppRoutes() {
       <Route path="/recruiter/dashboard" element={
         <ProtectedRoute allowedRoles={['recruiter']}>
           <RecruiterDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/jobs/create" element={
+        <ProtectedRoute allowedRoles={['recruiter']}>
+          <CreateJob />
         </ProtectedRoute>
       } />
       <Route path="/hiring/dashboard" element={
