@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -11,6 +11,9 @@ import JobDetail from './pages/jobs/JobDetail';
 import CreateJob from './pages/jobs/CreateJob';
 import RecruiterDashboard from './pages/jobs/RecruiterDashboard';
 import CandidateDashboard from './pages/jobs/CandidateDashboard';
+
+import MyApplications from './pages/applications/MyApplications';
+import JobApplicants from './pages/applications/JobApplicants';
 
 const HiringDashboard = () => (
   <div style={{ textAlign: 'center', marginTop: '100px', fontSize: '24px', color: '#1e40af' }}>
@@ -51,6 +54,19 @@ function AppRoutes() {
           <CreateJob />
         </ProtectedRoute>
       } />
+
+      {/* Applications routes */}
+      <Route path="/applications/my" element={
+        <ProtectedRoute allowedRoles={['candidate']}>
+          <MyApplications />
+        </ProtectedRoute>
+      } />
+      <Route path="/jobs/:id/applicants" element={
+        <ProtectedRoute allowedRoles={['recruiter']}>
+          <JobApplicants />
+        </ProtectedRoute>
+      } />
+
       <Route path="/hiring/dashboard" element={
         <ProtectedRoute allowedRoles={['hiring_manager']}>
           <HiringDashboard />
