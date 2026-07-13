@@ -1,7 +1,7 @@
 // src/pages/jobs/RecruiterDashboard.jsx
 // Protected: recruiter role only — view/edit/delete own job postings
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getAllJobs, deleteJob, updateJob } from '../../services/jobsApi';
@@ -211,6 +211,21 @@ const styles = {
     alignItems: 'center',
     gap: '4px',
     transition: 'border-color 0.2s',
+  },
+  applicantsBtn: {
+    padding: '8px 16px',
+    border: '1.5px solid #c7d2fe',
+    borderRadius: '8px',
+    background: '#eef2ff',
+    color: '#4338ca',
+    fontSize: '13px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    textDecoration: 'none',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '4px',
+    transition: 'all 0.2s',
   },
   editBtn: {
     padding: '8px 16px',
@@ -504,7 +519,7 @@ function RecruiterDashboard() {
         // Filter to only recruiter's own jobs by matching PostedById via postedByEmail
         const myJobs = allJobs.filter(j => j.postedByEmail === user?.email);
         setJobs(myJobs);
-      } catch (err) {
+      } catch (_err) {
         toast.error('Failed to load your jobs.');
       } finally {
         setLoading(false);
@@ -708,6 +723,9 @@ function RecruiterDashboard() {
               <div style={styles.jobCardRight}>
                 <Link to={`/jobs/${job.id}`} style={{ ...styles.viewBtn, textDecoration: 'none' }}>
                   View
+                </Link>
+                <Link to={`/jobs/${job.id}/applicants`} style={{ ...styles.applicantsBtn, textDecoration: 'none' }}>
+                  👥 Applicants
                 </Link>
                 <button style={styles.editBtn} onClick={() => setEditingJob(job)}>
                   ✏️ Edit

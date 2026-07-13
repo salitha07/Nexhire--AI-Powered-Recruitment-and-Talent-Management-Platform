@@ -1,8 +1,11 @@
 // src/pages/jobs/JobDetail.jsx
 // Single job detail view — loads job by :id from URL params
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { getJobById } from '../../services/jobsApi';
+import { applyToJob, getMyApplications } from '../../services/applicationsApi';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
 
@@ -157,11 +160,55 @@ const styles = {
     transition: 'opacity 0.2s',
     boxSizing: 'border-box',
   },
+  applyBtnDisabled: {
+    opacity: 0.6,
+    cursor: 'not-allowed',
+  },
   applyNote: {
     fontSize: '12px',
     color: '#94a3b8',
     textAlign: 'center',
     marginTop: '10px',
+  },
+  appliedBadge: {
+    display: 'block',
+    width: '100%',
+    padding: '14px',
+    background: '#dcfce7',
+    color: '#166534',
+    border: '1px solid #bbf7d0',
+    borderRadius: '10px',
+    fontSize: '14px',
+    fontWeight: '700',
+    textAlign: 'center',
+    boxSizing: 'border-box',
+  },
+  coverLetterInput: {
+    width: '100%',
+    padding: '12px',
+    borderRadius: '8px',
+    border: '1px solid #cbd5e1',
+    fontSize: '13px',
+    fontFamily: 'inherit',
+    color: '#1e293b',
+    resize: 'vertical',
+    marginBottom: '12px',
+    boxSizing: 'border-box',
+  },
+  applyFormActions: {
+    display: 'flex',
+    gap: '8px',
+  },
+  cancelBtn: {
+    flex: 1,
+    padding: '12px',
+    background: '#f1f5f9',
+    color: '#475569',
+    border: '1px solid #e2e8f0',
+    borderRadius: '10px',
+    fontSize: '13px',
+    fontWeight: '600',
+    cursor: 'pointer',
   },
   detailRow: {
     display: 'flex',
@@ -225,11 +272,17 @@ function formatDate(dateStr) {
 
 function JobDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Applications state
+  const [hasApplied, setHasApplied] = useState(false);
+  const [checkingApplied, setCheckingApplied] = useState(false);
+  const [showApplyForm, setShowApplyForm] = useState(false);
+  const [coverLetter, setCoverLetter] = useState('');
+  const [applying, setApplying] = useState(false);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -250,6 +303,39 @@ function JobDetail() {
     };
     fetchJob();
   }, [id]);
+
+  // If a candidate is logged in, check whether they've already applied to this job
+  useEffect(() => {
+    const checkApplied = async () => {
+      if (!isAuthenticated || user?.role !== 'candidate') return;
+      setCheckingApplied(true);
+      try {
+        const myApplications = await getMyApplications();
+        const already = myApplications.some((a) => String(a.jobId) === String(id));
+        setHasApplied(already);
+      } catch {
+        // Silently ignore — worst case the candidate sees the Apply button again
+      } finally {
+        setCheckingApplied(false);
+      }
+    };
+    checkApplied();
+  }, [id, isAuthenticated, user]);
+
+  const handleApply = async () => {
+    setApplying(true);
+    try {
+      await applyToJob({ jobId: Number(id), coverLetter });
+      toast.success('Application submitted successfully!');
+      setHasApplied(true);
+      setShowApplyForm(false);
+      setCoverLetter('');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to submit application.');
+    } finally {
+      setApplying(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -285,6 +371,7 @@ function JobDetail() {
   return (
     <div style={styles.page}>
       <style>{'@keyframes spin { to { transform: rotate(360deg); } } .apply-btn:hover { opacity: 0.88 !important; }'}</style>
+      <ToastContainer position="top-right" autoClose={3000} />
       <Navbar />
 
       {/* Hero */}
@@ -294,7 +381,7 @@ function JobDetail() {
         </Link>
 
         <div style={styles.jobMeta}>
-          <span style={{ ...styles.typeBadge }}>
+          <span style={{ ...styles.typeBadge, ...badgeStyle }}>
             {job.type}
           </span>
           {job.isActive && (
@@ -395,12 +482,54 @@ function JobDetail() {
             </div>
 
             {isAuthenticated && user?.role === 'candidate' ? (
-              <>
-                <button className="apply-btn" style={styles.applyBtn}>
-                  Apply Now →
-                </button>
-                <p style={styles.applyNote}>Application module coming soon</p>
-              </>
+              hasApplied ? (
+                <span style={styles.appliedBadge}>✓ Application Submitted</span>
+              ) : showApplyForm ? (
+                <div>
+                  <textarea
+                    style={styles.coverLetterInput}
+                    placeholder="Write a short cover letter (optional)..."
+                    value={coverLetter}
+                    onChange={(e) => setCoverLetter(e.target.value)}
+                    rows={4}
+                  />
+                  <div style={styles.applyFormActions}>
+                    <button
+                      className="apply-btn"
+                      style={{
+                        ...styles.applyBtn,
+                        ...(applying ? styles.applyBtnDisabled : {}),
+                      }}
+                      onClick={handleApply}
+                      disabled={applying}
+                    >
+                      {applying ? 'Submitting...' : 'Submit'}
+                    </button>
+                    <button
+                      style={styles.cancelBtn}
+                      onClick={() => setShowApplyForm(false)}
+                      disabled={applying}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <button
+                    className="apply-btn"
+                    style={{
+                      ...styles.applyBtn,
+                      ...(checkingApplied ? styles.applyBtnDisabled : {}),
+                    }}
+                    onClick={() => setShowApplyForm(true)}
+                    disabled={checkingApplied}
+                  >
+                    {checkingApplied ? 'Checking...' : 'Apply Now →'}
+                  </button>
+                  <p style={styles.applyNote}>Your profile will be shared with the recruiter</p>
+                </>
+              )
             ) : !isAuthenticated ? (
               <>
                 <Link to="/register" style={styles.applyBtn}>
