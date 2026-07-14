@@ -53,6 +53,16 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JobsService>();
 builder.Services.AddScoped<ApplicationsService>();
 
+// Named HttpClient for OpenRouter AI API
+builder.Services.AddHttpClient("OpenRouter", client =>
+{
+    client.BaseAddress = new Uri("https://openrouter.ai/api/v1/");
+    client.DefaultRequestHeaders.Add("Authorization",
+        $"Bearer {builder.Configuration["OpenRouter:ApiKey"]}");
+    client.DefaultRequestHeaders.Add("HTTP-Referer", "https://nexhire.app");
+    client.DefaultRequestHeaders.Add("X-Title", "Nexhire AI Recruitment");
+});
+
 // Swagger/OpenAPI
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
