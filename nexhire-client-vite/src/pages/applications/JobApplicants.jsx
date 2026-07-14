@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../../components/Navbar';
 import { getApplicationsForJob, updateApplicationStatus } from '../../services/applicationsApi';
+import AIAnalysisCard from '../../components/AIAnalysisCard';
 
 const statusColors = {
   Applied: { background: '#dbeafe', color: '#1e40af' },
@@ -174,6 +175,10 @@ function JobApplicants() {
                     </button>
                   </div>
                 )}
+
+                {/* ── AI Analysis ───────────────────────────────────────── */}
+                <AIAnalysisCard applicationId={app.id} />
+
               </div>
             );
           })}
