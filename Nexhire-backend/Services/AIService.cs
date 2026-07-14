@@ -145,6 +145,16 @@ namespace Nexhire.Services
             return result;
         }
 
+        /// <summary>
+        /// Returns the most recently saved AIResult for an application, or null if none exists.
+        /// Does NOT call OpenRouter — use RankCandidateAsync for that.
+        /// </summary>
+        public async Task<AIResult?> GetResultAsync(int applicationId)
+        {
+            return await _context.AIResults
+                .FirstOrDefaultAsync(r => r.ApplicationId == applicationId);
+        }
+
         // ─── Private DTO for deserialising the LLM response ─────────────────────────
         private class AIRankingResponse
         {
