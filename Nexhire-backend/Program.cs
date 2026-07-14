@@ -52,6 +52,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JobsService>();
 builder.Services.AddScoped<ApplicationsService>();
+builder.Services.AddScoped<AIService>();
 
 // Named HttpClient for OpenRouter AI API
 builder.Services.AddHttpClient("OpenRouter", client =>
