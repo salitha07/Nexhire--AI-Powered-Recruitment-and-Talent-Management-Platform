@@ -12,6 +12,7 @@ namespace Nexhire.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Application> Applications { get; set; }
+        public DbSet<Interview> Interviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,18 @@ namespace Nexhire.Data
                 .WithMany()
                 .HasForeignKey(a => a.CandidateId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Interview>()
+                .HasOne(i => i.Application)
+                .WithMany()
+                .HasForeignKey(i => i.ApplicationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Interview>()
+                .HasOne(i => i.ScheduledBy)
+                .WithMany()
+                .HasForeignKey(i => i.ScheduledById)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
     }
