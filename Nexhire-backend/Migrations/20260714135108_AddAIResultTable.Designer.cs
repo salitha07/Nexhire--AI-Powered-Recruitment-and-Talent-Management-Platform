@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nexhire.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Nexhire.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260714135108_AddAIResultTable")]
+    partial class AddAIResultTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,57 +91,6 @@ namespace Nexhire.Migrations
                         .IsUnique();
 
                     b.ToTable("Applications");
-                });
-
-            modelBuilder.Entity("Nexhire.Models.Interview", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Feedback")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("MeetingLink")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Mode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<DateTime>("ScheduledAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ScheduledById")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Score")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("ScheduledById");
-
-                    b.ToTable("Interviews");
                 });
 
             modelBuilder.Entity("Nexhire.Models.Job", b =>
@@ -262,25 +214,6 @@ namespace Nexhire.Migrations
                     b.Navigation("Candidate");
 
                     b.Navigation("Job");
-                });
-
-            modelBuilder.Entity("Nexhire.Models.Interview", b =>
-                {
-                    b.HasOne("Nexhire.Models.Application", "Application")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Nexhire.Models.User", "ScheduledBy")
-                        .WithMany()
-                        .HasForeignKey("ScheduledById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Application");
-
-                    b.Navigation("ScheduledBy");
                 });
 
             modelBuilder.Entity("Nexhire.Models.Job", b =>
