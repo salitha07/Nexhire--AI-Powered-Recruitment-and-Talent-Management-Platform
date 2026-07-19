@@ -15,15 +15,13 @@ import CandidateDashboard from './pages/jobs/CandidateDashboard';
 import MyApplications from './pages/applications/MyApplications';
 import JobApplicants from './pages/applications/JobApplicants';
 
+// Admin & Analytics (Member 6)
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
+
 const HiringDashboard = () => (
   <div style={{ textAlign: 'center', marginTop: '100px', fontSize: '24px', color: '#1e40af' }}>
     Hiring Manager Dashboard
-  </div>
-);
-
-const AdminDashboard = () => (
-  <div style={{ textAlign: 'center', marginTop: '100px', fontSize: '24px', color: '#1e40af' }}>
-    Admin Dashboard
   </div>
 );
 
@@ -72,9 +70,21 @@ function AppRoutes() {
           <HiringDashboard />
         </ProtectedRoute>
       } />
+
+      {/* Admin & Analytics routes (Member 6) */}
       <Route path="/admin/dashboard" element={
         <ProtectedRoute allowedRoles={['admin']}>
           <AdminDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/users" element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <AdminDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/analytics" element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <AnalyticsDashboard />
         </ProtectedRoute>
       } />
     </Routes>
