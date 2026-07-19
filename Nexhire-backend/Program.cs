@@ -96,6 +96,27 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    db.Database.Migrate();
+
+    if (!db.Users.Any(u => u.Role == "admin"))
+    {
+        db.Users.Add(new Nexhire.Models.User
+        {
+            FullName = "System Admin",
+            Email = "admin@nexhire.com",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+            Role = "admin",
+            CreatedAt = DateTime.UtcNow,
+            IsActive = true
+        });
+
+        db.SaveChanges();
+    }
+}
 
 // Middleware Pipeline
 app.UseSwagger();
