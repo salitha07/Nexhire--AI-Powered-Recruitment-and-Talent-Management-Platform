@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Unauthorized from './pages/Unauthorized';
 import Landing from './pages/Landing';
+import HiringDashboard from './pages/HiringDashboard';
+
 
 import JobListings from './pages/jobs/JobListings';
 import JobDetail from './pages/jobs/JobDetail';
@@ -15,15 +17,11 @@ import CandidateDashboard from './pages/jobs/CandidateDashboard';
 import MyApplications from './pages/applications/MyApplications';
 import JobApplicants from './pages/applications/JobApplicants';
 
-// Admin & Analytics (Member 6)
+
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
 
-const HiringDashboard = () => (
-  <div style={{ textAlign: 'center', marginTop: '100px', fontSize: '24px', color: '#1e40af' }}>
-    Hiring Manager Dashboard
-  </div>
-);
+
 
 function AppRoutes() {
   return (
