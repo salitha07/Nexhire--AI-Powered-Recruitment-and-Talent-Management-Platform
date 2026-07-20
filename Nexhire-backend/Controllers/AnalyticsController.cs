@@ -41,36 +41,47 @@ namespace Nexhire.Controllers
         [HttpGet("applications-per-month")]
         public async Task<IActionResult> GetApplicationsPerMonth()
         {
-            var data = await _context.Applications
+            // Step 1: only translatable operations run in the database
+            var rawData = await _context.Applications
                 .GroupBy(a => new { a.AppliedAt.Year, a.AppliedAt.Month })
-                .Select(g => new MonthlyStatDto
+                .Select(g => new
                 {
-                    Month = g.Key.Year + "-" + g.Key.Month.ToString("D2"),
+                    g.Key.Year,
+                    g.Key.Month,
                     Count = g.Count()
                 })
-                .OrderBy(g => g.Month)
+                .OrderBy(g => g.Year).ThenBy(g => g.Month)
                 .ToListAsync();
+
+            // Step 2: string formatting happens in memory (C# side)
+            var data = rawData.Select(g => new MonthlyStatDto
+            {
+                Month = $"{g.Year}-{g.Month:D2}",
+                Count = g.Count
+            }).ToList();
 
             return Ok(data);
         }
 
-        // GET /api/analytics/jobs-per-status (active vs inactive jobs)
+        // GET /api/analytics/jobs-per-status
         [HttpGet("jobs-per-status")]
         public async Task<IActionResult> GetJobsPerStatus()
         {
-            var data = await _context.Jobs
+            var rawData = await _context.Jobs
                 .GroupBy(j => j.IsActive)
-                .Select(g => new
-                {
-                    Status = g.Key ? "Active" : "Inactive",
-                    Count = g.Count()
-                })
+                .Select(g => new { IsActive = g.Key, Count = g.Count() })
                 .ToListAsync();
+
+            var data = rawData.Select(g => new
+            {
+                Status = g.IsActive ? "Active" : "Inactive",
+                g.Count
+            }).ToList();
 
             return Ok(data);
         }
 
-        // GET /api/analytics/applications-per-status (Applied, Shortlisted, Hired, Rejected etc.)
+        // GET /api/analytics/applications-per-status
         [HttpGet("applications-per-status")]
         public async Task<IActionResult> GetApplicationsPerStatus()
         {
