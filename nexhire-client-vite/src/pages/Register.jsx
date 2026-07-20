@@ -7,57 +7,54 @@ import Logo from '../components/Logo';
 
 const styles = {
  page: {
-  minHeight: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '30px',
-  background:
-    'linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #3b82f6 100%)',
-  fontFamily: "'Segoe UI', sans-serif",
+  width: '100vw',
+  height: '100vh',
+  margin: 0,
+  padding: 0,
+  overflow: 'hidden',
+  background: '#f8fafc',
 },
 
 container: {
   width: '100%',
-  maxWidth: '1100px',
-  minHeight: '700px',
+  height: '100vh',
   display: 'flex',
-  borderRadius: '28px',
   overflow: 'hidden',
-  backdropFilter: 'blur(20px)',
-  background: 'rgba(255,255,255,0.08)',
-  border: '1px solid rgba(255,255,255,0.15)',
-  boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+  background: '#fff',
 },
 
 leftPanel: {
-  flex: 1,
-  background:
-    'linear-gradient(135deg, rgba(30,64,175,0.95), rgba(59,130,246,0.95))',
+  flex: 1.2,
+  position: 'relative',
+  padding: '80px',
   color: '#fff',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: '60px',
+  backgroundImage:
+    "linear-gradient(rgba(37,99,235,0.75), rgba(15,23,42,0.75)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200')",
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
 },
 
 leftTitle: {
-  fontSize: '42px',
-  fontWeight: '700',
-  lineHeight: '1.2',
+  fontSize: '52px',
+  fontWeight: '800',
+  lineHeight: '1.1',
   marginBottom: '20px',
 },
 
 leftText: {
   fontSize: '17px',
   lineHeight: '1.8',
-  opacity: '0.9',
+  maxWidth: '450px',
+  opacity: 0.95,
 },
 
 rightPanel: {
-  flex: 1,
-  background: '#ffffff',
-  padding: '50px',
+  flex: 0.9,
+  background: '#fff',
+  padding: '40px 70px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -69,8 +66,8 @@ header: {
 },
 
 title: {
-  fontSize: '32px',
-  fontWeight: '700',
+  fontSize: '36px',
+  fontWeight: '800',
   color: '#0f172a',
   marginBottom: '8px',
 },
@@ -83,7 +80,7 @@ subtitle: {
 form: {
   display: 'flex',
   flexDirection: 'column',
-  gap: '18px',
+  gap: '12px',
 },
 
 formGroup: {
@@ -99,36 +96,34 @@ label: {
 },
 
 input: {
-  padding: '14px 16px',
-  border: '2px solid #e2e8f0',
-  borderRadius: '12px',
-  fontSize: '14px',
-  transition: 'all 0.3s ease',
+  padding: '12px 16px',
+  border: '1.5px solid #e2e8f0',
+  borderRadius: '14px',
+  fontSize: '15px',
   background: '#f8fafc',
 },
 
 select: {
-  padding: '14px 16px',
-  border: '2px solid #e2e8f0',
-  borderRadius: '12px',
-  fontSize: '14px',
+  padding: '12px 16px',
+  border: '1.5px solid #e2e8f0',
+  borderRadius: '14px',
+  fontSize: '15px',
   background: '#f8fafc',
-  cursor: 'pointer',
 },
 
 submitBtn: {
   width: '100%',
-  padding: '15px',
+  padding: '16px',
   border: 'none',
-  borderRadius: '12px',
+  borderRadius: '14px',
   background:
-    'linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%)',
+    'linear-gradient(135deg,#2563eb,#3b82f6)',
   color: '#fff',
-  fontWeight: '700',
   fontSize: '15px',
+  fontWeight: '700',
   cursor: 'pointer',
   marginTop: '10px',
-  boxShadow: '0 12px 30px rgba(37,99,235,0.35)',
+  boxShadow: '0 10px 30px rgba(37,99,235,0.3)',
 },
 
 footer: {
@@ -224,12 +219,49 @@ function Register() {
           Connect talented candidates with leading companies
           through intelligent matching and AI-powered hiring.
         </p>
+        <div
+  style={{
+    display: 'flex',
+    gap: '20px',
+    marginTop: '40px',
+  }}
+>
+  <div>
+    <h2 style={{ margin: 0 }}>10x</h2>
+    <p>Faster Hiring</p>
+  </div>
+
+  <div>
+    <h2 style={{ margin: 0 }}>95%</h2>
+    <p>Match Accuracy</p>
+  </div>
+
+  <div>
+    <h2 style={{ margin: 0 }}>500+</h2>
+    <p>Companies</p>
+  </div>
+</div>
       </div>
+      
 
       {/* Right Side */}
       <div style={styles.rightPanel}>
 
         <div style={styles.header}>
+          <div
+  style={{
+    background: '#eff6ff',
+    color: '#2563eb',
+    padding: '8px 15px',
+    borderRadius: '999px',
+    display: 'inline-block',
+    fontSize: '12px',
+    fontWeight: '700',
+    marginBottom: '15px',
+  }}
+>
+  AI Powered Recruitment
+</div>
           <Logo size="lg" />
           <h2 style={styles.title}>Create Account</h2>
           <p style={styles.subtitle}>
