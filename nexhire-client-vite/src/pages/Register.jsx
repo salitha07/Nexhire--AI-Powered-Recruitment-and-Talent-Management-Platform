@@ -6,105 +6,143 @@ import api from '../services/api';
 import Logo from '../components/Logo';
 
 const styles = {
-  page: {
-    minHeight: '100vh',
-    background: '#f0f4f8',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  },
-  card: {
-    background: '#ffffff',
-    borderRadius: '12px',
-    boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-    width: '100%',
-    maxWidth: '420px',
-    padding: '48px 40px',
-  },
-  header: {
-    textAlign: 'center',
-    marginBottom: '32px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  subtitle: {
-    fontSize: '13px',
-    color: '#64748b',
-    marginTop: '4px',
-  },
-  title: {
-    fontSize: '18px',
-    fontWeight: '600',
-    color: '#1e293b',
-    marginBottom: '24px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  formGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px',
-  },
-  label: {
-    fontSize: '13px',
-    fontWeight: '500',
-    color: '#374151',
-  },
-  input: {
-    padding: '11px 14px',
-    border: '1.5px solid #e2e8f0',
-    borderRadius: '8px',
-    fontSize: '14px',
-    color: '#1e293b',
-    background: '#f8fafc',
-    outline: 'none',
-  },
-  select: {
-    padding: '11px 14px',
-    border: '1.5px solid #e2e8f0',
-    borderRadius: '8px',
-    fontSize: '14px',
-    color: '#1e293b',
-    background: '#f8fafc',
-    outline: 'none',
-    cursor: 'pointer',
-  },
-  errorText: {
-    fontSize: '11px',
-    color: '#ef4444',
-    marginTop: '2px',
-  },
-  submitBtn: {
-    width: '100%',
-    padding: '12px',
-    background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '14px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    letterSpacing: '0.3px',
-    marginTop: '4px',
-  },
-  footer: {
-    textAlign: 'center',
-    marginTop: '24px',
-    fontSize: '13px',
-    color: '#64748b',
-  },
-  footerLink: {
-    color: '#1e40af',
-    fontWeight: '600',
-    textDecoration: 'none',
-  },
+ page: {
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '30px',
+  background:
+    'linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #3b82f6 100%)',
+  fontFamily: "'Segoe UI', sans-serif",
+},
+
+container: {
+  width: '100%',
+  maxWidth: '1100px',
+  minHeight: '700px',
+  display: 'flex',
+  borderRadius: '28px',
+  overflow: 'hidden',
+  backdropFilter: 'blur(20px)',
+  background: 'rgba(255,255,255,0.08)',
+  border: '1px solid rgba(255,255,255,0.15)',
+  boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+},
+
+leftPanel: {
+  flex: 1,
+  background:
+    'linear-gradient(135deg, rgba(30,64,175,0.95), rgba(59,130,246,0.95))',
+  color: '#fff',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  padding: '60px',
+},
+
+leftTitle: {
+  fontSize: '42px',
+  fontWeight: '700',
+  lineHeight: '1.2',
+  marginBottom: '20px',
+},
+
+leftText: {
+  fontSize: '17px',
+  lineHeight: '1.8',
+  opacity: '0.9',
+},
+
+rightPanel: {
+  flex: 1,
+  background: '#ffffff',
+  padding: '50px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+},
+
+header: {
+  textAlign: 'center',
+  marginBottom: '30px',
+},
+
+title: {
+  fontSize: '32px',
+  fontWeight: '700',
+  color: '#0f172a',
+  marginBottom: '8px',
+},
+
+subtitle: {
+  color: '#64748b',
+  fontSize: '14px',
+},
+
+form: {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '18px',
+},
+
+formGroup: {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+},
+
+label: {
+  fontSize: '14px',
+  fontWeight: '600',
+  color: '#334155',
+},
+
+input: {
+  padding: '14px 16px',
+  border: '2px solid #e2e8f0',
+  borderRadius: '12px',
+  fontSize: '14px',
+  transition: 'all 0.3s ease',
+  background: '#f8fafc',
+},
+
+select: {
+  padding: '14px 16px',
+  border: '2px solid #e2e8f0',
+  borderRadius: '12px',
+  fontSize: '14px',
+  background: '#f8fafc',
+  cursor: 'pointer',
+},
+
+submitBtn: {
+  width: '100%',
+  padding: '15px',
+  border: 'none',
+  borderRadius: '12px',
+  background:
+    'linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%)',
+  color: '#fff',
+  fontWeight: '700',
+  fontSize: '15px',
+  cursor: 'pointer',
+  marginTop: '10px',
+  boxShadow: '0 12px 30px rgba(37,99,235,0.35)',
+},
+
+footer: {
+  marginTop: '25px',
+  textAlign: 'center',
+  color: '#64748b',
+  fontSize: '14px',
+},
+
+footerLink: {
+  color: '#2563eb',
+  textDecoration: 'none',
+  fontWeight: '700',
+},
 };
 
 function Register() {
@@ -170,19 +208,38 @@ function Register() {
   });
 
   return (
-    <div style={styles.page}>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <div style={styles.card}>
+  <div style={styles.page}>
+    <ToastContainer position="top-right" autoClose={3000} />
+
+    <div style={styles.container}>
+
+      {/* Left Side */}
+      <div style={styles.leftPanel}>
+        <h1 style={styles.leftTitle}>
+          Find Your Dream Career with AI
+        </h1>
+
+        <p style={styles.leftText}>
+          Join the next generation recruitment platform.
+          Connect talented candidates with leading companies
+          through intelligent matching and AI-powered hiring.
+        </p>
+      </div>
+
+      {/* Right Side */}
+      <div style={styles.rightPanel}>
 
         <div style={styles.header}>
-          <Logo size="md" />
-          <p style={styles.subtitle}>AI-Powered Recruitment Platform</p>
+          <Logo size="lg" />
+          <h2 style={styles.title}>Create Account</h2>
+          <p style={styles.subtitle}>
+            Start your journey with NexHire today
+          </p>
         </div>
-
-        <h2 style={styles.title}>Create your account</h2>
 
         <form style={styles.form} onSubmit={handleSubmit}>
 
+          {/* Full Name */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Full Name</label>
             <input
@@ -192,12 +249,15 @@ function Register() {
               onChange={handleChange}
               onFocus={() => setFocusedInput('fullName')}
               onBlur={() => setFocusedInput(null)}
-              placeholder="John Doe"
+              placeholder="Enter your full name"
               style={getInputStyle('fullName')}
             />
-            {errors.fullName && <span style={styles.errorText}>{errors.fullName}</span>}
+            {errors.fullName && (
+              <span style={styles.errorText}>{errors.fullName}</span>
+            )}
           </div>
 
+          {/* Email */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Email Address</label>
             <input
@@ -207,31 +267,29 @@ function Register() {
               onChange={handleChange}
               onFocus={() => setFocusedInput('email')}
               onBlur={() => setFocusedInput(null)}
-              placeholder="you@example.com"
+              placeholder="Enter your email"
               style={getInputStyle('email')}
             />
-            {errors.email && <span style={styles.errorText}>{errors.email}</span>}
+            {errors.email && (
+              <span style={styles.errorText}>{errors.email}</span>
+            )}
           </div>
 
+          {/* Role */}
           <div style={styles.formGroup}>
-            <label style={styles.label}>I am a...</label>
+            <label style={styles.label}>Account Type</label>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
-              onFocus={() => setFocusedInput('role')}
-              onBlur={() => setFocusedInput(null)}
-              style={{
-                ...styles.select,
-                borderColor: focusedInput === 'role' ? '#3b82f6' : '#e2e8f0',
-                boxShadow: focusedInput === 'role' ? '0 0 0 3px rgba(59,130,246,0.1)' : 'none',
-              }}
+              style={styles.select}
             >
-              <option value="candidate">Job Seeker (Candidate)</option>
+              <option value="candidate">Job Seeker</option>
               <option value="recruiter">Recruiter</option>
             </select>
           </div>
 
+          {/* Password */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Password</label>
             <input
@@ -241,12 +299,12 @@ function Register() {
               onChange={handleChange}
               onFocus={() => setFocusedInput('password')}
               onBlur={() => setFocusedInput(null)}
-              placeholder="Min. 6 characters"
+              placeholder="Create password"
               style={getInputStyle('password')}
             />
-            {errors.password && <span style={styles.errorText}>{errors.password}</span>}
           </div>
 
+          {/* Confirm Password */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Confirm Password</label>
             <input
@@ -256,34 +314,34 @@ function Register() {
               onChange={handleChange}
               onFocus={() => setFocusedInput('confirmPassword')}
               onBlur={() => setFocusedInput(null)}
-              placeholder="Re-enter your password"
+              placeholder="Confirm password"
               style={getInputStyle('confirmPassword')}
             />
-            {errors.confirmPassword && <span style={styles.errorText}>{errors.confirmPassword}</span>}
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            style={{
-              ...styles.submitBtn,
-              opacity: isLoading ? 0.6 : 1,
-              cursor: isLoading ? 'not-allowed' : 'pointer',
-            }}
+            style={styles.submitBtn}
           >
-            {isLoading ? 'Creating account...' : 'Create Account'}
+            {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
 
         </form>
 
         <div style={styles.footer}>
-          Already have an account?{' '}
-          <Link to="/login" style={styles.footerLink}>Sign in</Link>
+          Already have an account?{" "}
+          <Link to="/login" style={styles.footerLink}>
+            Sign In
+          </Link>
         </div>
 
       </div>
+
     </div>
-  );
+  </div>
+  
+);
 }
 
 export default Register;
