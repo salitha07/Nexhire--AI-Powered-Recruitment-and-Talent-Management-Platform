@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import heroBg from "../assets/hero-bg.jpg";
 
 
 
@@ -15,7 +16,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '16px 80px',
-    background: '#ffffff',
+    background: '#f4f5f8',
     borderBottom: '1px solid #e2e8f0',
     position: 'sticky',
     top: 0,
@@ -77,11 +78,27 @@ const styles = {
 
   // ─── HERO ─────────────────────────────────────────────────
   hero: {
-    background: 'linear-gradient(135deg, #1e3a5f 0%, #1e40af 60%, #3b82f6 100%)',
-    padding: '100px 80px',
-    textAlign: 'center',
-    color: 'white',
-  },
+  backgroundImage: `
+    linear-gradient(
+      rgba(13, 32, 56, 0.75),
+      rgba(13, 32, 56, 0.75)
+    ),
+    url(${heroBg})
+  `,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+
+  padding: "120px 80px",
+  textAlign: "center",
+  color: "white",
+  minHeight: "80vh",
+
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+},
   heroBadge: {
     display: 'inline-block',
     background: 'rgba(255,255,255,0.15)',

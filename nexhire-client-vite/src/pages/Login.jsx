@@ -16,9 +16,10 @@ const styles = {
   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
 
   background: `
-    url(${bgImage}) right center / 100% 100% no-repeat,
-    #f0f4f8
-  `,
+  linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+  url(${bgImage}) right center / 65% 100% no-repeat,
+  #c2d5e8
+`,
 },
  
   card: {
