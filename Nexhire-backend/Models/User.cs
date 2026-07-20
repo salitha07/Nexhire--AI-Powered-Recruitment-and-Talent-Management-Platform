@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nexhire.Models
 {
@@ -9,26 +9,51 @@ namespace Nexhire.Models
         [Key]
         public int Id { get; set; }
 
+
+
         [Required]
         [StringLength(100)]
         public string FullName { get; set; } = string.Empty;
 
+
+
         [Required]
         [EmailAddress]
-        [StringLength(255)]
+        [StringLength(150)]
         public string Email { get; set; } = string.Empty;
+
+
 
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
 
+
+
+        // Candidate / Recruiter
+
         [Required]
         [StringLength(50)]
-        public string Role { get; set; } = string.Empty; // candidate, recruiter, hiring_manager, admin
+        public string Role { get; set; } = string.Empty;
 
-        [Required]
+
+
+        public bool IsActive { get; set; } = true;
+
+
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [Required]
-        public bool IsActive { get; set; } = true;
+
+
+        // Jobs posted by recruiter
+
+        public ICollection<Job> PostedJobs { get; set; }
+            = new List<Job>();
+
+
+        // Applications submitted by candidate
+
+        public ICollection<Application> Applications { get; set; }
+            = new List<Application>();
     }
 }
