@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -37,8 +37,7 @@ namespace Nexhire.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Requirements",
                 table: "Jobs",
-                type: "character varying(1000)",
-                maxLength: 1000,
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
@@ -46,8 +45,7 @@ namespace Nexhire.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Description",
                 table: "Jobs",
-                type: "character varying(2000)",
-                maxLength: 2000,
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
@@ -63,8 +61,7 @@ namespace Nexhire.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Feedback",
                 table: "Interviews",
-                type: "character varying(2000)",
-                maxLength: 2000,
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
@@ -72,8 +69,7 @@ namespace Nexhire.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "CoverLetter",
                 table: "Applications",
-                type: "character varying(2000)",
-                maxLength: 2000,
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
@@ -128,24 +124,21 @@ namespace Nexhire.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Skills",
                 table: "Applications",
-                type: "character varying(1000)",
-                maxLength: 1000,
+                type: "text",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "WhySuitable",
                 table: "Applications",
-                type: "character varying(2000)",
-                maxLength: 2000,
+                type: "text",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Recommendation",
                 table: "AIResults",
-                type: "character varying(500)",
-                maxLength: 500,
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
@@ -153,8 +146,7 @@ namespace Nexhire.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ExtractedSkills",
                 table: "AIResults",
-                type: "character varying(2000)",
-                maxLength: 2000,
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");

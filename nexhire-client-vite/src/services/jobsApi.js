@@ -47,6 +47,16 @@ export const updateJob = async (id, data) => {
 };
 
 /**
+ * GET /api/jobs/mine
+ * Returns only the authenticated recruiter's own job postings (by user ID).
+ * Requires recruiter JWT token.
+ */
+export const getMyJobs = async () => {
+  const res = await api.get('/api/jobs/mine');
+  return res.data;
+};
+
+/**
  * DELETE /api/jobs/:id
  * Requires recruiter JWT token (must be the original poster)
  */
