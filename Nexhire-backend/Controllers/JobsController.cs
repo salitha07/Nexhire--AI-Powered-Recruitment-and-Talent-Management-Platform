@@ -107,9 +107,11 @@ namespace Nexhire.Controllers
         // Helper: Extract current logged-in recruiter ID from JWT
         private int? GetCurrentUserId()
         {
-            var idClaim = User.FindFirst("Id")?.Value;
+            var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             if (int.TryParse(idClaim, out int userId))
                 return userId;
+
             return null;
         }
     }

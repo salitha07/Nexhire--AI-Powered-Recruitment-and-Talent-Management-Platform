@@ -83,12 +83,28 @@ namespace Nexhire.Services
                 SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
-            {
-                new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim("FullName", user.FullName),
-                new Claim(ClaimTypes.Role, user.Role)
-            };
+       
+{
+    new Claim(
+        ClaimTypes.NameIdentifier,
+        user.Id.ToString()
+    ),
+
+    new Claim(
+        ClaimTypes.Email,
+        user.Email
+    ),
+
+    new Claim(
+        "FullName",
+        user.FullName
+    ),
+
+    new Claim(
+        ClaimTypes.Role,
+        user.Role
+    )
+};
 
             var expires = DateTime.UtcNow.AddMinutes(expiryMinutes);
 
