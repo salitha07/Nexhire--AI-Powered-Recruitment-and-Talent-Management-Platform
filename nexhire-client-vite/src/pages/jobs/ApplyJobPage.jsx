@@ -8,7 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../../components/Navbar';
 
 import { getJobById } from '../../services/jobsApi';
-import { applyToJob } from '../../services/applicationsApi';
+import {
+  applyToJob,
+  uploadResume
+} from '../../services/applicationsApi';
 
 
 
@@ -143,6 +146,8 @@ function ApplyJobPage(){
   const [submitting,setSubmitting]=useState(false);
 
 
+  const [resumeFile, setResumeFile] = useState(null);
+
 
   const [form,setForm]=useState({
 
@@ -264,6 +269,13 @@ function ApplyJobPage(){
 
     setSubmitting(true);
 
+    let resumePath = "";
+
+if (resumeFile) {
+  const uploadResult = await uploadResume(resumeFile);
+  resumePath = uploadResult.fileUrl;
+}
+
 
 
     try{
@@ -271,14 +283,15 @@ function ApplyJobPage(){
 
       await applyToJob({
 
-        jobId:Number(id),
+  jobId: Number(id),
 
-        ...form,
+  ...form,
 
-        experienceYears:
-          Number(form.experienceYears)
+  resumePath,
 
-      });
+  experienceYears: Number(form.experienceYears)
+
+});
 
 
 
@@ -613,29 +626,16 @@ function ApplyJobPage(){
 
 
             <div style={styles.field}>
+  <label style={styles.label}>
+    Resume (PDF)
+  </label>
 
-
-              <label style={styles.label}>
-                Resume Path
-              </label>
-
-
-              <input
-
-                style={styles.input}
-
-                name="resumePath"
-
-                value={form.resumePath}
-
-                onChange={handleChange}
-
-                placeholder="Resume upload will be added next"
-
-              />
-
-
-            </div>
+  <input
+    type="file"
+    accept=".pdf"
+    onChange={(e) => setResumeFile(e.target.files[0])}
+  />
+</div>
 
 
 
