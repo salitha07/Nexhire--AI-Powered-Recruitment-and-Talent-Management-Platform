@@ -5,23 +5,29 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import Logo from '../components/Logo';
-
+import bgImage from "../assets/login-bg.jpg";
 const styles = {
-  page: {
-    minHeight: '100vh',
-    background: '#f0f4f8',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  },
+ page: {
+  minHeight: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  paddingLeft: "90px",
+  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+
+  background: `
+  linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+  url(${bgImage}) right center / 65% 100% no-repeat,
+  #c2d5e8
+`,
+},
+ 
   card: {
     background: '#ffffff',
     borderRadius: '12px',
     boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-    width: '100%',
-    maxWidth: '420px',
+    width: '150%',
+    maxWidth: '600px',
     padding: '48px 40px',
   },
   header: {
@@ -149,11 +155,13 @@ function Login() {
     boxShadow: focusedInput === name ? '0 0 0 3px rgba(59,130,246,0.1)' : 'none',
   });
 
-  return (
-    <div style={styles.page}>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <div style={styles.card}>
+return (
+  <div style={styles.page}>
+    <ToastContainer position="top-right" autoClose={3000} />
 
+    {/* Left Side - Login Form */}
+    <div style={styles.leftSide}>
+      <div style={styles.card}>
         <div style={styles.header}>
           <Logo size="md" />
           <p style={styles.subtitle}>AI-Powered Recruitment Platform</p>
@@ -169,10 +177,10 @@ function Login() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              onFocus={() => setFocusedInput('email')}
+              onFocus={() => setFocusedInput("email")}
               onBlur={() => setFocusedInput(null)}
               placeholder="you@example.com"
-              style={getInputStyle('email')}
+              style={getInputStyle("email")}
               required
             />
           </div>
@@ -184,10 +192,10 @@ function Login() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              onFocus={() => setFocusedInput('password')}
+              onFocus={() => setFocusedInput("password")}
               onBlur={() => setFocusedInput(null)}
               placeholder="Enter your password"
-              style={getInputStyle('password')}
+              style={getInputStyle("password")}
               required
             />
           </div>
@@ -204,21 +212,31 @@ function Login() {
             style={{
               ...styles.submitBtn,
               opacity: isLoading ? 0.6 : 1,
-              cursor: isLoading ? 'not-allowed' : 'pointer',
+              cursor: isLoading ? "not-allowed" : "pointer",
             }}
           >
-            {isLoading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
         <div style={styles.footer}>
-          Don't have an account?{' '}
-          <Link to="/register" style={styles.footerLink}>Create one</Link>
+          Don't have an account?{" "}
+          <Link to="/register" style={styles.footerLink}>
+            Create one
+          </Link>
         </div>
-
       </div>
     </div>
-  );
+
+    
+    <div
+      style={{
+        ...styles.rightSide,
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url(${bgImage})`,
+      }}
+    />
+  </div>
+);
 }
 
 export default Login;

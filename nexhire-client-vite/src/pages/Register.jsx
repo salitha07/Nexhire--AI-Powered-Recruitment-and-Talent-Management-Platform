@@ -6,105 +6,138 @@ import api from '../services/api';
 import Logo from '../components/Logo';
 
 const styles = {
-  page: {
-    minHeight: '100vh',
-    background: '#f0f4f8',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  },
-  card: {
-    background: '#ffffff',
-    borderRadius: '12px',
-    boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-    width: '100%',
-    maxWidth: '420px',
-    padding: '48px 40px',
-  },
-  header: {
-    textAlign: 'center',
-    marginBottom: '32px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  subtitle: {
-    fontSize: '13px',
-    color: '#64748b',
-    marginTop: '4px',
-  },
-  title: {
-    fontSize: '18px',
-    fontWeight: '600',
-    color: '#1e293b',
-    marginBottom: '24px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  formGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px',
-  },
-  label: {
-    fontSize: '13px',
-    fontWeight: '500',
-    color: '#374151',
-  },
-  input: {
-    padding: '11px 14px',
-    border: '1.5px solid #e2e8f0',
-    borderRadius: '8px',
-    fontSize: '14px',
-    color: '#1e293b',
-    background: '#f8fafc',
-    outline: 'none',
-  },
-  select: {
-    padding: '11px 14px',
-    border: '1.5px solid #e2e8f0',
-    borderRadius: '8px',
-    fontSize: '14px',
-    color: '#1e293b',
-    background: '#f8fafc',
-    outline: 'none',
-    cursor: 'pointer',
-  },
-  errorText: {
-    fontSize: '11px',
-    color: '#ef4444',
-    marginTop: '2px',
-  },
-  submitBtn: {
-    width: '100%',
-    padding: '12px',
-    background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '14px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    letterSpacing: '0.3px',
-    marginTop: '4px',
-  },
-  footer: {
-    textAlign: 'center',
-    marginTop: '24px',
-    fontSize: '13px',
-    color: '#64748b',
-  },
-  footerLink: {
-    color: '#1e40af',
-    fontWeight: '600',
-    textDecoration: 'none',
-  },
+ page: {
+  width: '100vw',
+  height: '100vh',
+  margin: 0,
+  padding: 0,
+  overflow: 'hidden',
+  background: '#f8fafc',
+},
+
+container: {
+  width: '100%',
+  height: '100vh',
+  display: 'flex',
+  overflow: 'hidden',
+  background: '#fff',
+},
+
+leftPanel: {
+  flex: 1.2,
+  position: 'relative',
+  padding: '80px',
+  color: '#fff',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  backgroundImage:
+    "linear-gradient(rgba(37,99,235,0.75), rgba(15,23,42,0.75)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200')",
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+},
+
+leftTitle: {
+  fontSize: '52px',
+  fontWeight: '800',
+  lineHeight: '1.1',
+  marginBottom: '20px',
+},
+
+leftText: {
+  fontSize: '17px',
+  lineHeight: '1.8',
+  maxWidth: '450px',
+  opacity: 0.95,
+},
+
+rightPanel: {
+  flex: 0.9,
+  background: '#fff',
+  padding: '40px 70px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+},
+
+header: {
+  textAlign: 'center',
+  marginBottom: '30px',
+},
+
+title: {
+  fontSize: '36px',
+  fontWeight: '800',
+  color: '#0f172a',
+  marginBottom: '8px',
+},
+
+subtitle: {
+  color: '#64748b',
+  fontSize: '14px',
+},
+
+form: {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
+},
+
+formGroup: {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+},
+
+label: {
+  fontSize: '14px',
+  fontWeight: '600',
+  color: '#334155',
+},
+
+input: {
+  padding: '12px 16px',
+  border: '1.5px solid #e2e8f0',
+  borderRadius: '14px',
+  fontSize: '15px',
+  background: '#f8fafc',
+},
+
+select: {
+  padding: '12px 16px',
+  border: '1.5px solid #e2e8f0',
+  borderRadius: '14px',
+  fontSize: '15px',
+  background: '#f8fafc',
+},
+
+submitBtn: {
+  width: '100%',
+  padding: '16px',
+  border: 'none',
+  borderRadius: '14px',
+  background:
+    'linear-gradient(135deg,#2563eb,#3b82f6)',
+  color: '#fff',
+  fontSize: '15px',
+  fontWeight: '700',
+  cursor: 'pointer',
+  marginTop: '10px',
+  boxShadow: '0 10px 30px rgba(37,99,235,0.3)',
+},
+
+footer: {
+  marginTop: '25px',
+  textAlign: 'center',
+  color: '#64748b',
+  fontSize: '14px',
+},
+
+footerLink: {
+  color: '#2563eb',
+  textDecoration: 'none',
+  fontWeight: '700',
+},
 };
 
 function Register() {
@@ -170,19 +203,75 @@ function Register() {
   });
 
   return (
-    <div style={styles.page}>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <div style={styles.card}>
+  <div style={styles.page}>
+    <ToastContainer position="top-right" autoClose={3000} />
+
+    <div style={styles.container}>
+
+      {/* Left Side */}
+      <div style={styles.leftPanel}>
+        <h1 style={styles.leftTitle}>
+          Find Your Dream Career with AI
+        </h1>
+
+        <p style={styles.leftText}>
+          Join the next generation recruitment platform.
+          Connect talented candidates with leading companies
+          through intelligent matching and AI-powered hiring.
+        </p>
+        <div
+  style={{
+    display: 'flex',
+    gap: '20px',
+    marginTop: '40px',
+  }}
+>
+  <div>
+    <h2 style={{ margin: 0 }}>10x</h2>
+    <p>Faster Hiring</p>
+  </div>
+
+  <div>
+    <h2 style={{ margin: 0 }}>95%</h2>
+    <p>Match Accuracy</p>
+  </div>
+
+  <div>
+    <h2 style={{ margin: 0 }}>500+</h2>
+    <p>Companies</p>
+  </div>
+</div>
+      </div>
+      
+
+      {/* Right Side */}
+      <div style={styles.rightPanel}>
 
         <div style={styles.header}>
-          <Logo size="md" />
-          <p style={styles.subtitle}>AI-Powered Recruitment Platform</p>
+          <div
+  style={{
+    background: '#eff6ff',
+    color: '#2563eb',
+    padding: '8px 15px',
+    borderRadius: '999px',
+    display: 'inline-block',
+    fontSize: '12px',
+    fontWeight: '700',
+    marginBottom: '15px',
+  }}
+>
+  AI Powered Recruitment
+</div>
+          <Logo size="lg" />
+          <h2 style={styles.title}>Create Account</h2>
+          <p style={styles.subtitle}>
+            Start your journey with NexHire today
+          </p>
         </div>
-
-        <h2 style={styles.title}>Create your account</h2>
 
         <form style={styles.form} onSubmit={handleSubmit}>
 
+          {/* Full Name */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Full Name</label>
             <input
@@ -192,12 +281,15 @@ function Register() {
               onChange={handleChange}
               onFocus={() => setFocusedInput('fullName')}
               onBlur={() => setFocusedInput(null)}
-              placeholder="John Doe"
+              placeholder="Enter your full name"
               style={getInputStyle('fullName')}
             />
-            {errors.fullName && <span style={styles.errorText}>{errors.fullName}</span>}
+            {errors.fullName && (
+              <span style={styles.errorText}>{errors.fullName}</span>
+            )}
           </div>
 
+          {/* Email */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Email Address</label>
             <input
@@ -207,31 +299,29 @@ function Register() {
               onChange={handleChange}
               onFocus={() => setFocusedInput('email')}
               onBlur={() => setFocusedInput(null)}
-              placeholder="you@example.com"
+              placeholder="Enter your email"
               style={getInputStyle('email')}
             />
-            {errors.email && <span style={styles.errorText}>{errors.email}</span>}
+            {errors.email && (
+              <span style={styles.errorText}>{errors.email}</span>
+            )}
           </div>
 
+          {/* Role */}
           <div style={styles.formGroup}>
-            <label style={styles.label}>I am a...</label>
+            <label style={styles.label}>Account Type</label>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
-              onFocus={() => setFocusedInput('role')}
-              onBlur={() => setFocusedInput(null)}
-              style={{
-                ...styles.select,
-                borderColor: focusedInput === 'role' ? '#3b82f6' : '#e2e8f0',
-                boxShadow: focusedInput === 'role' ? '0 0 0 3px rgba(59,130,246,0.1)' : 'none',
-              }}
+              style={styles.select}
             >
-              <option value="candidate">Job Seeker (Candidate)</option>
+              <option value="candidate">Job Seeker</option>
               <option value="recruiter">Recruiter</option>
             </select>
           </div>
 
+          {/* Password */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Password</label>
             <input
@@ -241,12 +331,12 @@ function Register() {
               onChange={handleChange}
               onFocus={() => setFocusedInput('password')}
               onBlur={() => setFocusedInput(null)}
-              placeholder="Min. 6 characters"
+              placeholder="Create password"
               style={getInputStyle('password')}
             />
-            {errors.password && <span style={styles.errorText}>{errors.password}</span>}
           </div>
 
+          {/* Confirm Password */}
           <div style={styles.formGroup}>
             <label style={styles.label}>Confirm Password</label>
             <input
@@ -256,34 +346,34 @@ function Register() {
               onChange={handleChange}
               onFocus={() => setFocusedInput('confirmPassword')}
               onBlur={() => setFocusedInput(null)}
-              placeholder="Re-enter your password"
+              placeholder="Confirm password"
               style={getInputStyle('confirmPassword')}
             />
-            {errors.confirmPassword && <span style={styles.errorText}>{errors.confirmPassword}</span>}
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            style={{
-              ...styles.submitBtn,
-              opacity: isLoading ? 0.6 : 1,
-              cursor: isLoading ? 'not-allowed' : 'pointer',
-            }}
+            style={styles.submitBtn}
           >
-            {isLoading ? 'Creating account...' : 'Create Account'}
+            {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
 
         </form>
 
         <div style={styles.footer}>
-          Already have an account?{' '}
-          <Link to="/login" style={styles.footerLink}>Sign in</Link>
+          Already have an account?{" "}
+          <Link to="/login" style={styles.footerLink}>
+            Sign In
+          </Link>
         </div>
 
       </div>
+
     </div>
-  );
+  </div>
+  
+);
 }
 
 export default Register;

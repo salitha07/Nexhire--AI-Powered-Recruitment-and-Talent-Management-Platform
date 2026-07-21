@@ -9,54 +9,82 @@ namespace Nexhire.Data
             : base(options)
         {
         }
+
+
         public DbSet<User> Users { get; set; }
+
         public DbSet<Job> Jobs { get; set; }
+
         public DbSet<Application> Applications { get; set; }
+
         public DbSet<AIResult> AIResults { get; set; }
+
         public DbSet<Interview> Interviews { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+
+
+            // User email must be unique
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            // A candidate can only apply once per job
+
+
+            // Candidate can apply only once for a job
             modelBuilder.Entity<Application>()
                 .HasIndex(a => new { a.JobId, a.CandidateId })
                 .IsUnique();
 
+
+
+            // Application -> Job
             modelBuilder.Entity<Application>()
                 .HasOne(a => a.Job)
-                .WithMany()
+                .WithMany(j => j.Applications)
                 .HasForeignKey(a => a.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+
+            // Application -> Candidate(User)
             modelBuilder.Entity<Application>()
                 .HasOne(a => a.Candidate)
-                .WithMany()
+                .WithMany(u => u.Applications)
                 .HasForeignKey(a => a.CandidateId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+
+            // AIResult -> Application (One-to-One)
             modelBuilder.Entity<AIResult>()
                 .HasOne(r => r.Application)
-                .WithMany()
-                .HasForeignKey(r => r.ApplicationId)
+                .WithOne()
+                .HasForeignKey<AIResult>(r => r.ApplicationId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+
+            // Interview -> Application
             modelBuilder.Entity<Interview>()
                 .HasOne(i => i.Application)
                 .WithMany()
                 .HasForeignKey(i => i.ApplicationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+
+            // Interview -> Scheduled User
             modelBuilder.Entity<Interview>()
                 .HasOne(i => i.ScheduledBy)
                 .WithMany()
                 .HasForeignKey(i => i.ScheduledById)
                 .OnDelete(DeleteBehavior.Restrict);
         }
-
     }
 }

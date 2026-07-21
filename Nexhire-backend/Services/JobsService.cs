@@ -18,132 +18,220 @@ namespace Nexhire.Services
             _context = context;
         }
 
-        // Get all jobs (with optional search and filters)
-        public async Task<IEnumerable<JobDto>> GetAllJobsAsync(string? search, string? filterType, string? filterLocation)
+
+        // Get all active jobs with search and filters
+        public async Task<IEnumerable<JobDto>> GetAllJobsAsync(
+            string? search,
+            string? filterType,
+            string? filterLocation)
         {
             var query = _context.Jobs
                 .Include(j => j.PostedBy)
+                .Where(j => j.IsActive)
                 .AsQueryable();
 
-            // Filter active jobs only
-            query = query.Where(j => j.IsActive);
 
-            if (!string.IsNullOrEmpty(search))
+
+            if (!string.IsNullOrWhiteSpace(search))
             {
                 var searchLower = search.ToLower();
-                query = query.Where(j => j.Title.ToLower().Contains(searchLower) || 
-                                         j.Description.ToLower().Contains(searchLower) ||
-                                         j.Requirements.ToLower().Contains(searchLower));
+
+                query = query.Where(j =>
+                    j.Title.ToLower().Contains(searchLower) ||
+                    j.Description.ToLower().Contains(searchLower) ||
+                    j.Requirements.ToLower().Contains(searchLower));
             }
 
-            if (!string.IsNullOrEmpty(filterType))
+
+
+            if (!string.IsNullOrWhiteSpace(filterType))
             {
-                query = query.Where(j => j.Type.ToLower() == filterType.ToLower());
+                query = query.Where(j =>
+                    j.Type.ToLower() == filterType.ToLower());
             }
 
-            if (!string.IsNullOrEmpty(filterLocation))
+
+
+            if (!string.IsNullOrWhiteSpace(filterLocation))
             {
-                query = query.Where(j => j.Location.ToLower().Contains(filterLocation.ToLower()));
+                query = query.Where(j =>
+                    j.Location.ToLower()
+                    .Contains(filterLocation.ToLower()));
             }
+
+
 
             var jobs = await query
                 .OrderByDescending(j => j.CreatedAt)
                 .ToListAsync();
 
+
             return jobs.Select(MapToDto);
         }
 
-        // Get single job by ID
+
+
+
+        // Get job details
         public async Task<JobDto?> GetJobByIdAsync(int id)
         {
             var job = await _context.Jobs
                 .Include(j => j.PostedBy)
                 .FirstOrDefaultAsync(j => j.Id == id);
 
-            return job != null ? MapToDto(job) : null;
+
+            return job == null ? null : MapToDto(job);
         }
 
-        // Create a new job
-        public async Task<JobDto> CreateJobAsync(CreateJobDto dto, int recruiterId)
+
+
+
+
+        // Recruiter creates job
+        public async Task<JobDto> CreateJobAsync(
+            CreateJobDto dto,
+            int recruiterId)
         {
+
             var job = new Job
             {
                 Title = dto.Title,
                 Description = dto.Description,
                 Requirements = dto.Requirements,
+
                 Location = dto.Location,
                 Type = dto.Type,
                 SalaryRange = dto.SalaryRange,
+
                 PostedById = recruiterId,
-                CreatedAt = DateTime.UtcNow,
-                IsActive = true
+
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
             };
 
+
             _context.Jobs.Add(job);
+
             await _context.SaveChangesAsync();
 
-            // Reload to include PostedBy details
+
+
             var savedJob = await _context.Jobs
                 .Include(j => j.PostedBy)
                 .FirstAsync(j => j.Id == job.Id);
 
+
             return MapToDto(savedJob);
         }
 
-        // Update a job
-        public async Task<JobDto?> UpdateJobAsync(int id, UpdateJobDto dto, int recruiterId)
+
+
+
+
+        // Recruiter updates job
+        public async Task<JobDto?> UpdateJobAsync(
+            int id,
+            UpdateJobDto dto,
+            int recruiterId)
         {
+
             var job = await _context.Jobs
                 .Include(j => j.PostedBy)
                 .FirstOrDefaultAsync(j => j.Id == id);
 
-            if (job == null) return null;
 
-            // Ensure the user is the owner (recruiter who posted it)
-            if (job.PostedById != recruiterId) return null;
+
+            if (job == null)
+                return null;
+
+
+
+            if (job.PostedById != recruiterId)
+                return null;
+
+
 
             job.Title = dto.Title;
             job.Description = dto.Description;
             job.Requirements = dto.Requirements;
+
             job.Location = dto.Location;
             job.Type = dto.Type;
             job.SalaryRange = dto.SalaryRange;
+
             job.IsActive = dto.IsActive;
 
+
+
             await _context.SaveChangesAsync();
+
+
             return MapToDto(job);
         }
 
-        // Delete (deactivate/remove) a job
-        public async Task<bool> DeleteJobAsync(int id, int recruiterId)
-        {
-            var job = await _context.Jobs.FindAsync(id);
-            if (job == null) return false;
 
-            // Ensure the user is the owner (recruiter who posted it)
-            if (job.PostedById != recruiterId) return false;
+
+
+
+        // Delete job
+        public async Task<bool> DeleteJobAsync(
+            int id,
+            int recruiterId)
+        {
+
+            var job = await _context.Jobs
+                .FirstOrDefaultAsync(j => j.Id == id);
+
+
+
+            if (job == null)
+                return false;
+
+
+
+            if (job.PostedById != recruiterId)
+                return false;
+
+
 
             _context.Jobs.Remove(job);
+
             await _context.SaveChangesAsync();
+
+
             return true;
         }
 
-        // Helper method to map model to DTO
+
+
+
+
+        // Map Job model to DTO
         private static JobDto MapToDto(Job job)
         {
             return new JobDto
             {
                 Id = job.Id,
+
                 Title = job.Title,
                 Description = job.Description,
                 Requirements = job.Requirements,
+
                 Location = job.Location,
                 Type = job.Type,
                 SalaryRange = job.SalaryRange,
+
                 PostedById = job.PostedById,
-                PostedByEmail = job.PostedBy?.Email ?? string.Empty,
-                PostedByFullName = job.PostedBy?.FullName ?? string.Empty,
+
+                PostedByEmail =
+                    job.PostedBy?.Email ?? string.Empty,
+
+                PostedByFullName =
+                    job.PostedBy?.FullName ?? string.Empty,
+
+
                 CreatedAt = job.CreatedAt,
+
                 IsActive = job.IsActive
             };
         }

@@ -1,5 +1,17 @@
-// src/services/applicationsApi.js
 import api from './api';
+
+export const uploadResume = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await api.post("/api/uploads/resume", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return res.data;
+};
 
 export const applyToJob = async (data) => {
   const res = await api.post('/api/applications', data);
