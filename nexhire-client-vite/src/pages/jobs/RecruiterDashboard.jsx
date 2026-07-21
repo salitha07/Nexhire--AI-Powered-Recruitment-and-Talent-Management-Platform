@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAllJobs, deleteJob, updateJob } from '../../services/jobsApi';
+import { getMyJobs, deleteJob, updateJob } from '../../services/jobsApi';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
 
@@ -515,9 +515,9 @@ function RecruiterDashboard() {
     const fetchMyJobs = async () => {
       setLoading(true);
       try {
-        const allJobs = await getAllJobs();
-        // Filter to only recruiter's own jobs by matching PostedById via postedByEmail
-        const myJobs = allJobs.filter(j => j.postedByEmail === user?.email);
+        // Uses GET /api/jobs/mine — server filters by the recruiter's JWT user ID.
+        // This is accurate and includes inactive/closed jobs too.
+        const myJobs = await getMyJobs();
         setJobs(myJobs);
       } catch (_err) {
         toast.error('Failed to load your jobs.');

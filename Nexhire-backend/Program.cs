@@ -64,8 +64,10 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JobsService>();
 builder.Services.AddScoped<ApplicationsService>();
+builder.Services.AddScoped<PdfReaderService>();
 builder.Services.AddScoped<AIService>();
 builder.Services.AddScoped<InterviewsService>();
+builder.Services.AddScoped<InterviewPrepService>();
 
 
 // OpenRouter Client

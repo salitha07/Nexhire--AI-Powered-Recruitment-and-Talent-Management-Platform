@@ -39,6 +39,20 @@ namespace Nexhire.Controllers
             return Ok(job);
         }
 
+        // GET: api/jobs/mine  (Recruiter: returns only their own jobs, including inactive)
+        [Authorize(Roles = "recruiter")]
+        [HttpGet("mine")]
+        public async Task<IActionResult> GetMyJobs()
+        {
+            var recruiterId = GetCurrentUserId();
+            if (recruiterId == null)
+                return Unauthorized(new { message = "Invalid token." });
+
+            var jobs = await _jobsService.GetMyJobsAsync(recruiterId.Value);
+            return Ok(jobs);
+        }
+
+
         // POST: api/jobs  (Recruiter only)
         [Authorize(Roles = "recruiter")]
         [HttpPost]

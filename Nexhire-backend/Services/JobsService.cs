@@ -72,6 +72,19 @@ namespace Nexhire.Services
 
 
 
+        // Get all jobs posted by a specific recruiter (for the recruiter's own dashboard)
+        public async Task<IEnumerable<JobDto>> GetMyJobsAsync(int recruiterId)
+        {
+            var jobs = await _context.Jobs
+                .Include(j => j.PostedBy)
+                .Where(j => j.PostedById == recruiterId)
+                .OrderByDescending(j => j.CreatedAt)
+                .ToListAsync();
+
+            return jobs.Select(MapToDto);
+        }
+
+
         // Get job details
         public async Task<JobDto?> GetJobByIdAsync(int id)
         {
