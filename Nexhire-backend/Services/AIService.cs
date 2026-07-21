@@ -15,12 +15,17 @@ namespace Nexhire.Services
     {
         private readonly AppDbContext _context;
         private readonly HttpClient _httpClient;
+        private readonly PdfReaderService _pdfReader;
 
 
-        public AIService(AppDbContext context, IHttpClientFactory httpClientFactory)
+        public AIService(
+            AppDbContext context,
+            IHttpClientFactory httpClientFactory,
+            PdfReaderService pdfReader)
         {
             _context = context;
             _httpClient = httpClientFactory.CreateClient("OpenRouter");
+            _pdfReader = pdfReader;
         }
 
 
@@ -68,6 +73,12 @@ namespace Nexhire.Services
 
 
 
+            // Extract resume text from the uploaded PDF (if one exists)
+            var resumeText = string.IsNullOrWhiteSpace(application.ResumePath)
+                ? string.Empty
+                : _pdfReader.ExtractText(application.ResumePath);
+
+
             var userMessage =
 
                 $"## Job Title\n{job.Title}\n\n" +
@@ -99,6 +110,11 @@ namespace Nexhire.Services
                     ? "Not provided."
                     : application.CoverLetter)}\n\n" +
 
+                // Include the actual resume content if it was successfully extracted
+                (string.IsNullOrWhiteSpace(resumeText)
+                    ? string.Empty
+                    : $"## Resume Content (extracted from PDF)\n{resumeText}\n\n") +
+
                 "Evaluate this candidate against the job requirements and return ONLY the JSON object.";
 
 
@@ -126,7 +142,7 @@ namespace Nexhire.Services
 
                 temperature = 0.2,
 
-                max_tokens = 300
+                max_tokens = 400
             };
 
 
