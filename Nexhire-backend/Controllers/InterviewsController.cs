@@ -11,10 +11,14 @@ namespace Nexhire.Controllers
     public class InterviewsController : ControllerBase
     {
         private readonly InterviewsService _interviewsService;
+        private readonly InterviewPrepService _interviewPrepService;
 
-        public InterviewsController(InterviewsService interviewsService)
+        public InterviewsController(
+            InterviewsService interviewsService,
+            InterviewPrepService interviewPrepService)
         {
             _interviewsService = interviewsService;
+            _interviewPrepService = interviewPrepService;
         }
 
         // Recruiter schedules an interview for an applicant
@@ -37,6 +41,30 @@ namespace Nexhire.Controllers
             catch (InvalidOperationException ex)
             {
                 return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        // Recruiter: get AI-generated interview prep suggestions for an applicant
+        [Authorize(Roles = "recruiter")]
+        [HttpPost("prep/{applicationId}")]
+        public async Task<IActionResult> GetInterviewPrep(int applicationId)
+        {
+            var recruiterId = GetCurrentUserId();
+            if (recruiterId == null)
+                return Unauthorized(new { message = "Invalid token." });
+
+            try
+            {
+                var prep = await _interviewPrepService.GeneratePrepAsync(applicationId);
+                return Ok(prep);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(502, new { message = "AI service unavailable: " + ex.Message });
             }
         }
 
