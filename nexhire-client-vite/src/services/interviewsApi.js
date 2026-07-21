@@ -21,6 +21,16 @@ export const scheduleInterview = async (dto) => {
 };
 
 /**
+ * PUT /api/interviews/{id}/status
+ * Reschedule or cancel an interview the recruiter owns.
+ * Pass { status, scheduledAt? } — use status "Scheduled" to reschedule.
+ */
+export const updateInterview = async (id, dto) => {
+  const res = await api.put(`/api/interviews/${id}/status`, dto);
+  return res.data;
+};
+
+/**
  * GET /api/interviews/my
  * Candidate: get own upcoming and past interviews.
  */

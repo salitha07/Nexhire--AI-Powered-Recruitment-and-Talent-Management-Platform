@@ -94,7 +94,7 @@ namespace Nexhire.Services
                     new { role = "user",   content = userMessage  }
                 },
                 temperature = 0.4,  // Slightly higher for creative question generation
-                max_tokens = 800
+                max_tokens = 2000
             };
 
             var httpContent = new StringContent(
