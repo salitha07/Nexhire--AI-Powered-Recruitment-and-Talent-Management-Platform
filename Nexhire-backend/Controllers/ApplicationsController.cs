@@ -12,91 +12,292 @@ namespace Nexhire.Controllers
     {
         private readonly ApplicationsService _applicationsService;
 
-        public ApplicationsController(ApplicationsService applicationsService)
+
+        public ApplicationsController(
+            ApplicationsService applicationsService)
         {
             _applicationsService = applicationsService;
         }
 
+
+
+        // =====================================================
+        // Candidate Apply For Job
+        // POST: /api/applications
+        // =====================================================
+
         [Authorize(Roles = "candidate")]
         [HttpPost]
-        public async Task<IActionResult> Apply([FromBody] CreateApplicationDto dto)
+        public async Task<IActionResult> Apply(
+            [FromBody] CreateApplicationDto dto)
         {
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+
+
             var candidateId = GetCurrentUserId();
+
+
             if (candidateId == null)
-                return Unauthorized(new { message = "Invalid token." });
+            {
+                return Unauthorized(new
+                {
+                    message = "Invalid token."
+                });
+            }
+
+
 
             try
             {
-                var application = await _applicationsService.ApplyAsync(dto, candidateId.Value);
-                return CreatedAtAction(nameof(GetMyApplications), new { }, application);
+
+                var application =
+                    await _applicationsService.ApplyAsync(
+                        dto,
+                        candidateId.Value
+                    );
+
+
+                return CreatedAtAction(
+                    nameof(GetMyApplications),
+                    new { },
+                    application
+                );
+
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+
             }
+
         }
+
+
+
+
+
+
+        // =====================================================
+        // Candidate Get Own Applications
+        // GET: /api/applications/my
+        // =====================================================
 
         [Authorize(Roles = "candidate")]
         [HttpGet("my")]
         public async Task<IActionResult> GetMyApplications()
         {
-            var candidateId = GetCurrentUserId();
-            if (candidateId == null)
-                return Unauthorized(new { message = "Invalid token." });
 
-            var applications = await _applicationsService.GetMyApplicationsAsync(candidateId.Value);
+            var candidateId = GetCurrentUserId();
+
+
+            if (candidateId == null)
+            {
+                return Unauthorized(new
+                {
+                    message = "Invalid token."
+                });
+            }
+
+
+
+            var applications =
+                await _applicationsService
+                .GetMyApplicationsAsync(
+                    candidateId.Value
+                );
+
+
             return Ok(applications);
+
         }
+
+
+
+
+
+
+
+
+        // =====================================================
+        // Recruiter Get Applicants
+        // GET: /api/applications/job/{jobId}
+        // =====================================================
 
         [Authorize(Roles = "recruiter")]
         [HttpGet("job/{jobId}")]
-        public async Task<IActionResult> GetApplicationsForJob(int jobId)
+        public async Task<IActionResult> GetApplicationsForJob(
+            int jobId)
         {
-            var recruiterId = GetCurrentUserId();
-            if (recruiterId == null)
-                return Unauthorized(new { message = "Invalid token." });
 
-            var applications = await _applicationsService.GetApplicationsForJobAsync(jobId, recruiterId.Value);
+
+            var recruiterId = GetCurrentUserId();
+
+
+
+            if (recruiterId == null)
+            {
+                return Unauthorized(new
+                {
+                    message = "Invalid token."
+                });
+            }
+
+
+
+
+
+            var applications =
+                await _applicationsService
+                .GetApplicationsForJobAsync(
+                    jobId,
+                    recruiterId.Value
+                );
+
+
+
+
             if (applications == null)
-                return NotFound(new { message = "Job not found or not authorized." });
+            {
+                return NotFound(new
+                {
+                    message =
+                    "Job not found or not authorized."
+                });
+            }
+
+
+
 
             return Ok(applications);
+
         }
+
+
+
+
+
+
+
+
+        // =====================================================
+        // Recruiter Update Application Status
+        // PUT: /api/applications/{id}/status
+        // =====================================================
 
         [Authorize(Roles = "recruiter")]
         [HttpPut("{id}/status")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateApplicationStatusDto dto)
+        public async Task<IActionResult> UpdateStatus(
+            int id,
+            [FromBody] UpdateApplicationStatusDto dto)
         {
+
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+
+
             var recruiterId = GetCurrentUserId();
+
+
+
             if (recruiterId == null)
-                return Unauthorized(new { message = "Invalid token." });
+            {
+                return Unauthorized(new
+                {
+                    message = "Invalid token."
+                });
+            }
+
+
+
+
 
             try
             {
-                var application = await _applicationsService.UpdateStatusAsync(id, dto, recruiterId.Value);
+
+                var application =
+                    await _applicationsService
+                    .UpdateStatusAsync(
+                        id,
+                        dto,
+                        recruiterId.Value
+                    );
+
+
+
                 if (application == null)
-                    return NotFound(new { message = "Application not found or not authorized." });
+                {
+                    return NotFound(new
+                    {
+                        message =
+                        "Application not found or not authorized."
+                    });
+                }
+
+
 
                 return Ok(application);
+
+
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+
             }
+
         }
+
+
+
+
+
+
+
+
+        // =====================================================
+        // Get Current Logged User ID From JWT
+        // =====================================================
 
         private int? GetCurrentUserId()
         {
-            var idClaim = User.FindFirst("Id")?.Value;
-            if (int.TryParse(idClaim, out int userId))
+
+            var idClaim =
+                User.FindFirst("Id")?.Value
+                ??
+                User.FindFirst(
+                    ClaimTypes.NameIdentifier
+                )?.Value
+                ??
+                User.FindFirst("sub")?.Value;
+
+
+
+
+            if (int.TryParse(
+                idClaim,
+                out int userId))
+            {
                 return userId;
+            }
+
+
+
             return null;
+
         }
+
     }
 }
