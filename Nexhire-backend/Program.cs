@@ -65,6 +65,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JobsService>();
 builder.Services.AddScoped<ApplicationsService>();
 builder.Services.AddScoped<AIService>();
+builder.Services.AddScoped<InterviewsService>();
 
 
 // OpenRouter Client
@@ -105,6 +106,21 @@ using (var scope = app.Services.CreateScope())
         scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
     db.Database.Migrate();
+    if (!db.Users.Any(u => u.Role == "admin"))
+    {
+        db.Users.Add(new Nexhire.Models.User
+        {
+            FullName = "System Admin",
+            Email = "admin@nexhire.com",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+            Role = "admin",
+            CreatedAt = DateTime.UtcNow,
+            IsActive = true
+        });
+        db.SaveChanges();
+        Console.WriteLine("? Default admin seeded: admin@nexhire.com / Admin@123");
+    }
+
 }
 
 app.UseSwagger();
