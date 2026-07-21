@@ -16,8 +16,8 @@ function getRecommendationStyle(rec) {
   if (!rec) return {};
   const r = rec.toLowerCase();
   if (r.includes('strong hire')) return { color: '#166534', background: '#dcfce7' };
-  if (r.includes('hire'))        return { color: '#065f46', background: '#d1fae5' };
-  if (r.includes('maybe'))       return { color: '#92400e', background: '#fef3c7' };
+  if (r.includes('hire')) return { color: '#065f46', background: '#d1fae5' };
+  if (r.includes('maybe')) return { color: '#92400e', background: '#fef3c7' };
   return { color: '#991b1b', background: '#fee2e2' };
 }
 
@@ -42,9 +42,9 @@ function SkillPill({ skill }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 function AIAnalysisCard({ applicationId }) {
-  const [loading, setLoading]   = useState(false);
+  const [loading, setLoading] = useState(false);
   const [aiResult, setAiResult] = useState(null);
-  const [error, setError]       = useState(null);
+  const [error, setError] = useState(null);
 
   const handleRunAnalysis = async () => {
     setLoading(true);
@@ -66,8 +66,8 @@ function AIAnalysisCard({ applicationId }) {
   };
 
   const scoreStyle = aiResult ? getScoreStyle(aiResult.matchScore) : {};
-  const recStyle   = aiResult ? getRecommendationStyle(aiResult.recommendation) : {};
-  const skills     = aiResult?.extractedSkills
+  const recStyle = aiResult ? getRecommendationStyle(aiResult.recommendation) : {};
+  const skills = aiResult?.extractedSkills
     ? aiResult.extractedSkills.split(',').filter(Boolean)
     : [];
 
@@ -120,7 +120,7 @@ function AIAnalysisCard({ applicationId }) {
             {/* Sparkle icon */}
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
             </svg>
             {aiResult ? 'Re-run AI Analysis' : 'Run AI Analysis'}
           </>
@@ -168,7 +168,7 @@ function AIAnalysisCard({ applicationId }) {
           }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
               stroke="white" strokeWidth="2.2" strokeLinecap="round">
-              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
             </svg>
             <span style={{ color: '#fff', fontWeight: '700', fontSize: '13px', letterSpacing: '0.04em' }}>
               AI Analysis Result
@@ -202,7 +202,7 @@ function AIAnalysisCard({ applicationId }) {
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b', marginTop: '2px' }}>
                   {aiResult.matchScore >= 75 ? 'Strong Match' :
-                   aiResult.matchScore >= 50 ? 'Moderate Match' : 'Weak Match'}
+                    aiResult.matchScore >= 50 ? 'Moderate Match' : 'Weak Match'}
                 </div>
               </div>
             </div>
